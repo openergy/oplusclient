@@ -1,0 +1,11 @@
+class Route:
+    organization = "oteams/organizations"
+    project = "oteams/projects"
+    geometry = "ossgeometry/geometries"
+    task = "osstasks/user_tasks"
+    idf = "ossgeometry/geometries"
+    floorspace = "ossgeometry/floorspaces"
+    obat = "ossbat/obats"
+    weather = "ossweather/generic_weather_series"
+    mono_simulation_group = "osssimulations/mono_simulation_groups"
+    simulation_group = "osssimulations/simulation_groups"
