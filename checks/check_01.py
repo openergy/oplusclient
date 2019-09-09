@@ -37,13 +37,17 @@ wprint("creating geometry...")
 geometry = project.create_geometry("3zones_cta", "floorspace")
 print("done")
 
-wprint("listing geometry...")
-project.list_geometry()
-print("done")
-
 wprint("uploading and importing floorspace...")
 geometry.import_geometry("resources/test.flo")
 print("done")
+
+wprint("uploading and importing ogw...")
+ogw_geom = project.create_geometry("ogw_test", "import")
+ogw_geom.import_geometry("/home/zach/Downloads/8e88cf61-5be5-45fa-a948-4034c2a1b9d8.ogw", format="ogw")
+print("done")
+
+wprint("listing geometry...")
+print(f"{len(project.list_geometry())} found, done.")
 
 wprint("updating geometry site info...")
 geometry.update(

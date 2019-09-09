@@ -3,7 +3,6 @@ class Route:
     project = "oteams/projects"
     geometry = "ossgeometry/geometries"
     task = "osstasks/user_tasks"
-    idf = "ossgeometry/geometries"
     floorspace = "ossgeometry/floorspaces"
     obat = "ossbat/obats"
     weather = "ossweather/generic_weather_series"

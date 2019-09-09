@@ -147,7 +147,6 @@ class ProjectChild(APIMapping):
         else:
             raise ValueError(f"{instance_or_str} should be a model object or an id.")
 
-
     def get_project_id(self):
         project_link = self.project
         if isinstance(project_link, str):
@@ -178,7 +177,7 @@ class Geometry(ProjectChild):
     _struct_type = "Geometry"
     _resource = Route.geometry
 
-    def import_geometry(self, path):
+    def import_geometry(self, path, format=None):
         """
         uploads and imports geometry.
         """
@@ -186,14 +185,15 @@ class Geometry(ProjectChild):
         if self.format == "floorspace":
             upload_resource = Route.floorspace
             upload_id = self.floorspace
-        elif self.format == "import":
-            upload_resource = Route.idf
-            upload_id = self.id
+            format = self.format
         else:
-            raise NotImplementedError(f"Import for '{self.format}' was not implemented.")
-        self._client._dev_client.upload(upload_resource, upload_id, "save_blob_url", path)
+            upload_resource = Route.geometry
+            upload_id = self.id
+            if format is None:
+                raise ValueError("For non-floorspace geometries, the format must be specified when importing.")
+        self._client._dev_client.upload(upload_resource, upload_id, path)
         # import
-        self._client._dev_client.import_data(Route.geometry, self.id, self.format)
+        self._client._dev_client.import_data(Route.geometry, self.id, format)
 
 
 class Obat(ProjectChild):
@@ -201,7 +201,7 @@ class Obat(ProjectChild):
     _resource = Route.obat
 
     def import_excel(self, path):
-        self._client._dev_client.upload(Route.obat, self.id, "upload_url", path)
+        self._client._dev_client.upload(Route.obat, self.id, path)
         self._client._dev_client.import_data(Route.obat, self.id, "xlsx")
 
 
@@ -213,7 +213,7 @@ class WeatherSeries(ProjectChild):
         """
         uploads and imports Epw weather file.
         """
-        self._client._dev_client.upload(Route.weather, self.id, "import_upload_url", path)
+        self._client._dev_client.upload(Route.weather, self.id, path)
         self._client._dev_client.import_data(Route.weather, self.id, "epw")
 
 
@@ -235,7 +235,6 @@ class MonoSimulationGroup(ProjectChild):
             data["config_obat"] = Obat.get_id(project, data["config_obat"])
 
         super().update(**data)
-
 
     def start_simulation(self):
         """

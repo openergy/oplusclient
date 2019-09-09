@@ -93,8 +93,8 @@ class LowLevelClient:
                     f"{import_task.message}"
                 )
 
-    def upload(self, resource, resource_id, method, path):
-        upload_url = self.detail_route(resource, resource_id, "GET", method)["blob_url"]
+    def upload(self, resource, resource_id, path):
+        upload_url = self.detail_route(resource, resource_id, "GET", "upload_url")["blob_url"]
         with open(os.path.realpath(path), "rb") as f:
             response = self.upload_client.put(
                 upload_url,
