@@ -78,7 +78,7 @@ class Project(APIMapping):
 
     def create_geometry(self, name, geometry_format, **data):
         if geometry_format not in ("floorspace", "import"):
-            raise ValueError(f"'format' keyword should be one of ('import', 'floorspace') and not '{data['format']}'.")
+            raise ValueError(f"'format' keyword should be one of ('import', 'floorspace') and not '{geometry_format}'.")
         data["name"] = name
         data["format"] = geometry_format
         return self._create_child(Geometry, **data)
