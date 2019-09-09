@@ -16,14 +16,15 @@ class OSSClient:
     """
     End User Interface.
     """
-    def __init__(self, auth_path=None, url_path=None):
+    def __init__(self, auth_path=None, url=None, url_path=None):
         """
         Prompts the user for login and password
         """
-        if url_path is None:
-            raise RuntimeError("Unspecified url.")
-        with open(url_path) as f:
-            url = f.read().strip()
+        if url is None:
+            if url_path is None:
+                raise RuntimeError("Unspecified url.")
+            with open(url_path) as f:
+                url = f.read().strip()
 
         if auth_path is not None:
             login, password = json.load(open(auth_path))

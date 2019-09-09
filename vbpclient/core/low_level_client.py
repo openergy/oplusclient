@@ -4,6 +4,7 @@ import requests
 from .rest_api_client import RESTClient
 from .tasker import Task
 
+
 class LowLevelClient:
     """
     Encapsulates two clients one for upload (requests.Session), one for download (RESTClient).
@@ -74,21 +75,23 @@ class LowLevelClient:
             content_type=content_type,
         )
 
-
-    def import_data(self, resource, resource_id, import_format):
+    def import_data(self, resource, resource_id, import_format, **kwargs):
         response = self.detail_route(
             resource,
             resource_id,
             "PATCH",
             "import_data",
-            data={"import_format": import_format},
+            data=dict(import_format=import_format, **kwargs),
         )
         if response:
             task_id = response["user_task"]
             import_task = Task(task_id, self)
             success = import_task.wait_for_completion(period=0)
             if not success:
-                raise RuntimeError(f"Import failed.")
+                raise RuntimeError(
+                    f"Import failed. Error:\n"
+                    f"{import_task.message}"
+                )
 
     def upload(self, resource, resource_id, method, path):
         upload_url = self.detail_route(resource, resource_id, "GET", method)["blob_url"]

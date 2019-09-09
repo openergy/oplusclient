@@ -1,13 +1,15 @@
 import functools
 import sys
 import time
+import os
 
-sys.path.append("..")
+dir_path = os.path.realpath(os.path.dirname(__file__))
+sys.path.append(os.path.realpath(os.path.join(dir_path, "..")))
 
 from vbpclient import OSSClient, ResourceNotFound
 
-auth_path = "../../rest_api_credentials.json"
-url_path = "../../url_path.txt"
+auth_path = os.path.join(dir_path, "..", "rest_api_credentials.json")
+url_path = os.path.join(dir_path, "..", "url_path.txt")
 wprint = functools.partial(print, end="")
 
 wprint("authenticating to client...")
