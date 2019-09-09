@@ -118,7 +118,6 @@ class Project(APIMapping):
     def list_weather_series(self, **params):
         return list(self.iter_weather_series(**params))
 
-
     def create_mono_simulation_group(self, name, **data):
         data["name"] = name
         return self._create_child(MonoSimulationGroup, **data)
@@ -128,6 +127,7 @@ class Project(APIMapping):
 
     def iter_mono_simulation_group(self, **params):
         return self._iter_child(MonoSimulationGroup, **params)
+
     def list_mono_simulation_group(self, **params):
         return list(self.iter_mono_simulation_group(self, **params))
 
