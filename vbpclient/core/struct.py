@@ -86,10 +86,10 @@ class APIMapping:
             super().__setattr__(attr, value)
 
     @classmethod
-    def _dev_iter(cls, **params):
-        json_data = self._client._dev_client.list_iter_all(cls._resource, params=params)
+    def _dev_iter(cls, client, **params):
+        json_data = client.list_iter_all(cls._resource, params=params)
         return (
-            cls(element, self) for element in json_data
+            cls(element, client) for element in json_data
         )
 
     @property
@@ -121,6 +121,7 @@ class APIMapping:
 
     def __repr__(self):
         return f"<{self._struct_type} id='{self.id}'>"
+
     def __str__(self):
         return str(self._struct_data)
 

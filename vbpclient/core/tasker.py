@@ -60,6 +60,12 @@ class Task:
             self.reload()
         return self._response["status_code"]
 
+    @property
+    def message(self):
+        if not self._response["finished"]:
+            self.reload()
+        return self._response["message"]
+
     def wait_for_completion(self, period=0):
         """
         Method to reload data until task finishes.

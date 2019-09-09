@@ -1,13 +1,15 @@
 import functools
 import sys
 import time
+import os
 
-sys.path.append("..")
+dir_path = os.path.realpath(os.path.dirname(__file__))
+sys.path.append(os.path.realpath(os.path.join(dir_path, "..")))
 
 from vbpclient import OSSClient, ResourceNotFound
 
-auth_path = "../../rest_api_credentials.json"
-url_path = "../../url_path.txt"
+auth_path = os.path.join(dir_path, "..", "rest_api_credentials.json")
+url_path = os.path.join(dir_path, "..", "url_path.txt")
 wprint = functools.partial(print, end="")
 
 wprint("authenticating to client...")
@@ -38,6 +40,14 @@ print("done")
 wprint("uploading and importing floorspace...")
 geometry.import_geometry("resources/test.flo")
 print("done")
+
+wprint("uploading and importing ogw...")
+ogw_geom = project.create_geometry("ogw_test", "import")
+ogw_geom.import_geometry("/home/zach/Downloads/8e88cf61-5be5-45fa-a948-4034c2a1b9d8.ogw", format="ogw")
+print("done")
+
+wprint("listing geometry...")
+print(f"{len(project.list_geometry())} found, done.")
 
 wprint("updating geometry site info...")
 geometry.update(

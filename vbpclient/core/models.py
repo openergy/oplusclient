@@ -54,8 +54,6 @@ class Project(APIMapping):
     def get_organization(self):
         return self._client.get_organization_by_id(self.get_organization_id())
 
-
-    # TODO make these functions _dev_private as they are now used outside or `Project` ?
     def _create_child(self, cls, **data):
         if "project" in data:
             raise ValueError(f"Cannot pass a project id, using '{self.id}'.")
@@ -66,7 +64,7 @@ class Project(APIMapping):
     def _get_child(self, cls, name):
         candidates = list(filter(
             lambda child: child.name == name,
-            cls._dev_iter(project=self.id)
+            cls._dev_iter(self._client._dev_client, project=self.id)
         ))
         if len(candidates) != 1:
             raise ResourceNotFound(f"{cls.__name__} '{name}' not be found.")
@@ -76,12 +74,11 @@ class Project(APIMapping):
         if "project" in params:
             raise ValueError(f"Cannot pass a project id, using '{self.id}'.")
         params["project"] = self.id
-        return cls._dev_iter(**params)
-
+        return cls._dev_iter(self._client._dev_client, **params)
 
     def create_geometry(self, name, geometry_format, **data):
         if geometry_format not in ("floorspace", "import"):
-            raise ValueError(f"'format' keyword should be one of ('import', 'floorspace') and not '{data['format']}'.")
+            raise ValueError(f"'format' keyword should be one of ('import', 'floorspace') and not '{geometry_format}'.")
         data["name"] = name
         data["format"] = geometry_format
         return self._create_child(Geometry, **data)
@@ -94,7 +91,6 @@ class Project(APIMapping):
 
     def list_geometry(self, **params):
         return list(self.iter_geometry(**params))
-
 
     def create_obat(self, name, **data):
         data["name"] = name
@@ -109,7 +105,6 @@ class Project(APIMapping):
     def list_obat(self, **params):
         return list(self.iter_obat(**params))
 
-
     def create_weather_series(self, name, **data):
         data["name"] = name
         return self._create_child(WeatherSeries, **data)
@@ -123,7 +118,6 @@ class Project(APIMapping):
     def list_weather_series(self, **params):
         return list(self.iter_weather_series(**params))
 
-
     def create_mono_simulation_group(self, name, **data):
         data["name"] = name
         return self._create_child(MonoSimulationGroup, **data)
@@ -133,6 +127,7 @@ class Project(APIMapping):
 
     def iter_mono_simulation_group(self, **params):
         return self._iter_child(MonoSimulationGroup, **params)
+
     def list_mono_simulation_group(self, **params):
         return list(self.iter_mono_simulation_group(self, **params))
 
@@ -151,7 +146,6 @@ class ProjectChild(APIMapping):
             return instance_or_str.id
         else:
             raise ValueError(f"{instance_or_str} should be a model object or an id.")
-
 
     def get_project_id(self):
         project_link = self.project
@@ -183,7 +177,7 @@ class Geometry(ProjectChild):
     _struct_type = "Geometry"
     _resource = Route.geometry
 
-    def import_geometry(self, path):
+    def import_geometry(self, path, format=None):
         """
         uploads and imports geometry.
         """
@@ -191,14 +185,15 @@ class Geometry(ProjectChild):
         if self.format == "floorspace":
             upload_resource = Route.floorspace
             upload_id = self.floorspace
-        elif self.format == "import":
-            upload_resource = Route.idf
-            upload_id = self.id
+            format = self.format
         else:
-            raise NotImplementedError(f"Import for '{self.format}' was not implemented.")
-        self._client._dev_client.upload(upload_resource, upload_id, "save_blob_url", path)
+            upload_resource = Route.geometry
+            upload_id = self.id
+            if format is None:
+                raise ValueError("For non-floorspace geometries, the format must be specified when importing.")
+        self._client._dev_client.upload(upload_resource, upload_id, path)
         # import
-        self._client._dev_client.import_data(Route.geometry, self.id, self.format)
+        self._client._dev_client.import_data(Route.geometry, self.id, format)
 
 
 class Obat(ProjectChild):
@@ -206,7 +201,7 @@ class Obat(ProjectChild):
     _resource = Route.obat
 
     def import_excel(self, path):
-        self._client._dev_client.upload(Route.obat, self.id, "upload_url", path)
+        self._client._dev_client.upload(Route.obat, self.id, path)
         self._client._dev_client.import_data(Route.obat, self.id, "xlsx")
 
 
@@ -218,7 +213,7 @@ class WeatherSeries(ProjectChild):
         """
         uploads and imports Epw weather file.
         """
-        self._client._dev_client.upload(Route.weather, self.id, "import_upload_url", path)
+        self._client._dev_client.upload(Route.weather, self.id, path)
         self._client._dev_client.import_data(Route.weather, self.id, "epw")
 
 
@@ -240,7 +235,6 @@ class MonoSimulationGroup(ProjectChild):
             data["config_obat"] = Obat.get_id(project, data["config_obat"])
 
         super().update(**data)
-
 
     def start_simulation(self):
         """
@@ -275,7 +269,7 @@ class Simulation(APIMapping):
     # resource not specified because it is object-dependant
 
     @classmethod
-    def _dev_iter(cls, **params):
+    def _dev_iter(cls, client, **params):
         raise NotImplemented()
 
     def __init__(self, data_dict, client, resource):
