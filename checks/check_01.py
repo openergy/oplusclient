@@ -37,6 +37,10 @@ wprint("creating geometry...")
 geometry = project.create_geometry("3zones_cta", "floorspace")
 print("done")
 
+wprint("listing geometry...")
+project.list_geometry()
+print("done")
+
 wprint("uploading and importing floorspace...")
 geometry.import_geometry("resources/test.flo")
 print("done")

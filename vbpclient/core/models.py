@@ -54,8 +54,6 @@ class Project(APIMapping):
     def get_organization(self):
         return self._client.get_organization_by_id(self.get_organization_id())
 
-
-    # TODO make these functions _dev_private as they are now used outside or `Project` ?
     def _create_child(self, cls, **data):
         if "project" in data:
             raise ValueError(f"Cannot pass a project id, using '{self.id}'.")
@@ -66,7 +64,7 @@ class Project(APIMapping):
     def _get_child(self, cls, name):
         candidates = list(filter(
             lambda child: child.name == name,
-            cls._dev_iter(project=self.id)
+            cls._dev_iter(self._client._dev_client, project=self.id)
         ))
         if len(candidates) != 1:
             raise ResourceNotFound(f"{cls.__name__} '{name}' not be found.")
@@ -76,8 +74,7 @@ class Project(APIMapping):
         if "project" in params:
             raise ValueError(f"Cannot pass a project id, using '{self.id}'.")
         params["project"] = self.id
-        return cls._dev_iter(**params)
-
+        return cls._dev_iter(self._client._dev_client, **params)
 
     def create_geometry(self, name, geometry_format, **data):
         if geometry_format not in ("floorspace", "import"):
@@ -95,7 +92,6 @@ class Project(APIMapping):
     def list_geometry(self, **params):
         return list(self.iter_geometry(**params))
 
-
     def create_obat(self, name, **data):
         data["name"] = name
         return self._create_child(Obat, **data)
@@ -108,7 +104,6 @@ class Project(APIMapping):
 
     def list_obat(self, **params):
         return list(self.iter_obat(**params))
-
 
     def create_weather_series(self, name, **data):
         data["name"] = name
@@ -275,7 +270,7 @@ class Simulation(APIMapping):
     # resource not specified because it is object-dependant
 
     @classmethod
-    def _dev_iter(cls, **params):
+    def _dev_iter(cls, client, **params):
         raise NotImplemented()
 
     def __init__(self, data_dict, client, resource):
