@@ -10,13 +10,12 @@ class LowLevelClient:
     Encapsulates two clients one for upload (requests.Session), one for download (RESTClient).
     """
     _conf = {
-        "port": 443,
         "root_endpoint": "api/v1",
         "is_on_resource": "/",
         "verify_ssl": True,
     }
 
-    def __init__(self, credentials, host):
+    def __init__(self, credentials, host, port):
         """
         Creates two low level clients and implements direct wrappers to to their functionality.
 
@@ -24,11 +23,8 @@ class LowLevelClient:
         ----------
         credentials  : tuple containing exactly 2 strings.
                    first element is the long, second element is the password.
-        Examples
-        --------
-        >>> client = LowLevelClient("example@openergy", "password")
         """
-        self.client = RESTClient(credentials=credentials, host=host, **self._conf)
+        self.client = RESTClient(credentials=credentials, host=host, port=port, **self._conf)
         self.upload_client = requests.Session()
 
     def retrieve(self, resource, resource_id):
@@ -70,6 +66,7 @@ class LowLevelClient:
             http_method,
             method_name,
             data=data,
+            params=params,
             return_json=return_json,
             send_json=send_json,
             content_type=content_type,

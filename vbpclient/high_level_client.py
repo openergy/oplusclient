@@ -1,3 +1,4 @@
+import re
 import getpass
 import json
 
@@ -32,7 +33,14 @@ class OSSClient:
             login = input("Login: ")
             password = getpass.getpass()
 
-        self._dev_client = LowLevelClient(credentials=(login, password), host=url)
+        match = re.match(r"(.*):(\d+)/?$", url)
+        if match is not None:
+            url = match.group(1)
+            port = int(match.group(2))
+        else:
+            port = 443
+
+        self._dev_client = LowLevelClient(credentials=(login, password), host=url, port=port)
 
     def create_organization(self, **data):
         json_data = self._dev_client.create(Route.organization, data)
@@ -75,5 +83,15 @@ class OSSClient:
         return Project(json_data, self)
 
     def get_project(self, organization_name, project_name):
-        raise NotImplementedError()
+        """
+        Parameters
+        ----------
+        organization_name: str
+        project_name: str
+
+        Returns
+        -------
+        Project
+        """
+        return self.get_organization(organization_name).get_project(project_name)
 

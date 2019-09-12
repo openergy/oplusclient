@@ -1,7 +1,7 @@
 from ..conf import Route
 from ..struct import APIMapping
 from ..exceptions import ResourceNotFound
-from . import WeatherSeries, Obat, MonoSimulationGroup, Geometry
+from . import WeatherSeries, Obat, MonoSimulationGroup, Geometry, GenericSimulationGroup
 
 
 class Project(APIMapping):
@@ -41,6 +41,17 @@ class Project(APIMapping):
         return cls._dev_iter(self._client._dev_client, **params)
 
     def create_geometry(self, name, geometry_format, **data):
+        """
+        Parameters
+        ----------
+        name
+        geometry_format
+        data
+
+        Returns
+        -------
+        Geometry
+        """
         if geometry_format not in ("floorspace", "import"):
             raise ValueError(f"'format' keyword should be one of ('import', 'floorspace') and not '{geometry_format}'.")
         data["name"] = name
@@ -57,6 +68,16 @@ class Project(APIMapping):
         return list(self.iter_geometry(**params))
 
     def create_obat(self, name, **data):
+        """
+        Parameters
+        ----------
+        name: str
+        data
+
+        Returns
+        -------
+        Obat
+        """
         data["name"] = name
         return self._create_child(Obat, **data)
 
@@ -94,5 +115,18 @@ class Project(APIMapping):
 
     def list_mono_simulation_group(self, **params):
         return list(self.iter_mono_simulation_group(**params))
+
+    def create_generic_simulation_group(self, name, **data):
+        data["name"] = name
+        return self._create_child(GenericSimulationGroup, **data)
+
+    def get_generic_simulation_group(self, generic_simulation_group_name):
+        return self._get_child(GenericSimulationGroup, generic_simulation_group_name)
+
+    def iter_generic_simulation_group(self, **params):
+        return self._iter_child(GenericSimulationGroup, **params)
+
+    def list_generic_simulation_group(self, **params):
+        return list(self.iter_generic_simulation_group(**params))
 
 

@@ -7,4 +7,5 @@ class Route:
     obat = "ossbat/obats"
     weather = "ossweather/generic_weather_series"
     mono_simulation_group = "osssimulations/mono_simulation_groups"
+    generic_simulation_group = "osssimulations/generic_simulation_groups"
     simulation_group = "osssimulations/simulation_groups"
