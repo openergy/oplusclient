@@ -28,7 +28,7 @@ class Project(APIMapping):
     def _get_child(self, cls, name):
         candidates = list(filter(
             lambda child: child.name == name,
-            cls._dev_iter(self._client._dev_client, project=self.id)
+            cls._dev_iter(self._client, project=self.id)
         ))
         if len(candidates) != 1:
             raise ResourceNotFound(f"{cls.__name__} '{name}' not be found.")
@@ -38,7 +38,7 @@ class Project(APIMapping):
         if "project" in params:
             raise ValueError(f"Cannot pass a project id, using '{self.id}'.")
         params["project"] = self.id
-        return cls._dev_iter(self._client._dev_client, **params)
+        return cls._dev_iter(self._client, **params)
 
     def create_geometry(self, name, geometry_format, **data):
         """

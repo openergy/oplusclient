@@ -87,7 +87,7 @@ class APIMapping:
 
     @classmethod
     def _dev_iter(cls, client, **params):
-        json_data = client.list_iter_all(cls._resource, params=params)
+        json_data = client._dev_client.list_iter_all(cls._resource, params=params)
         return (
             cls(element, client) for element in json_data
         )
