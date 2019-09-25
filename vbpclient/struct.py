@@ -69,6 +69,12 @@ class APIMapping:
     _json_data = dict()
 
     def __init__(self, data_dict, client):
+        """
+        Parameters
+        ----------
+        data_dict: dict
+        client: vbpclient.OSSClient
+        """
         self._json_data = data_dict
         self._struct_data = Struct(data_dict)
         self._client = client
@@ -77,6 +83,7 @@ class APIMapping:
         if attr in self._json_data:
             return getattr(self._struct_data, attr)
         else:
+            print(self._json_data)
             raise AttributeError(f"Attribute '{attr}' not found.")
 
     def __setattr__(self, attr, value):

@@ -99,3 +99,28 @@ class LowLevelClient:
                 headers={"x-ms-blob-type": "BlockBlob"}
             )
             self.client.check_rep(response)
+
+    def download(self, resource, resource_id, detail_route="blob_url", path=None):
+        """
+        Returns
+        -------
+        bytes or None
+        """
+        download_url = self.detail_route(resource, resource_id, "GET", detail_route)["blob_url"]
+        response = self.upload_client.get(
+            download_url
+        )
+        if isinstance(response.content, bytes):
+            if path is None:
+                return response.content
+            else:
+                with open(path, "wb") as f:
+                    f.write(response.content)
+        elif isinstance(response.content, str):
+            if path is None:
+                return response.content.encode("utf-8")
+            else:
+                with open(path, "w") as f:
+                    f.write(response.content)
+        else:
+            raise ValueError("Response content is neither str nor bytes")

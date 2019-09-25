@@ -24,3 +24,7 @@ class Geometry(ProjectChild):
         # import
         self._client._dev_client.import_data(Route.geometry, self.id, format)
 
+    def download_ogw(self, path=None):
+        if self.empty:
+            raise ValueError("Geometry is empty, cannot download Ogw. Please import first.")
+        return self._client._dev_client.download(Route.geometry, self.id, path=path)

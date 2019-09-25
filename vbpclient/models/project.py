@@ -59,6 +59,11 @@ class Project(APIMapping):
         return self._create_child(Geometry, **data)
 
     def get_geometry(self, geometry_name):
+        """
+        Returns
+        -------
+        Geometry
+        """
         return self._get_child(Geometry, geometry_name)
 
     def iter_geometry(self, **params):
