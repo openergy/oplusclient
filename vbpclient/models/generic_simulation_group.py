@@ -1,7 +1,7 @@
 from ..conf import Route
 from ..tasker import Task
 from ..exceptions import SimulationError, ResourceNotFound
-from . import ProjectChild, WeatherSeries, Geometry, Obat, Simulation
+from . import ProjectChild, Weather, Geometry, Obat, Simulation
 
 
 class GenericSimulationGroup(ProjectChild):

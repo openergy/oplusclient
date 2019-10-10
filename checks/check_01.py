@@ -14,6 +14,7 @@ wprint = functools.partial(print, end="")
 
 wprint("authenticating to client...")
 client = OSSClient(auth_path=auth_path, url_path=url_path)
+# client = OSSClient(auth_path=auth_path, url="http://localhost:8000")
 print("done")
 
 wprint("finding organization...")
@@ -55,7 +56,7 @@ geometry.update(
     site_longitude=2,
     site_altitude=46,
     site_country_code="FR",
-    site_postal_code=75004,
+    site_postal_code="75004",
     site_time_zone_ref="Europe/Paris"
 )
 print("done")

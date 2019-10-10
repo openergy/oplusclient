@@ -1,7 +1,7 @@
 from ..conf import Route
 from ..struct import APIMapping
 from ..exceptions import ResourceNotFound
-from . import WeatherSeries, Obat, MonoSimulationGroup, Geometry, GenericSimulationGroup
+from . import Weather, Obat, MonoSimulationGroup, Geometry, GenericSimulationGroup
 
 
 class Project(APIMapping):
@@ -95,17 +95,29 @@ class Project(APIMapping):
     def list_obat(self, **params):
         return list(self.iter_obat(**params))
 
-    def create_weather_series(self, name, **data):
+    def create_weather(self, name, **data):
+        """
+        Returns
+        -------
+        Weather
+        """
         data["name"] = name
-        return self._create_child(WeatherSeries, **data)
+        if "format" not in data:
+            data["format"] = "generic"
+        return self._create_child(Weather, **data)
 
-    def get_weather_series(self, weather_series_name):
-        return self._get_child(WeatherSeries, weather_series_name)
+    def get_weather(self, weather_series_name):
+        """
+        Returns
+        -------
+        Weather
+        """
+        return self._get_child(Weather, weather_series_name)
 
-    def iter_weather_series(self, **params):
-        return self._iter_child(WeatherSeries, **params)
+    def iter_weather(self, **params):
+        return self._iter_child(Weather, **params)
 
-    def list_weather_series(self, **params):
+    def list_weather(self, **params):
         return list(self.iter_weather_series(**params))
 
     def create_mono_simulation_group(self, name, **data):

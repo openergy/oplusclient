@@ -124,7 +124,9 @@ class APIMapping:
             destroy_task = Task(task_id, self._client._dev_client)
             success = destroy_task.wait_for_completion(period=0)
             if not success:
-                raise RuntimeError(f"{self._struct_type} could not be removed.")
+                raise RuntimeError(f"{self._struct_type} could not be removed.\n"
+                                   f"{destroy_task.message}\n"
+                                   f"{destroy_task.response['_out_text']}")
 
     def __repr__(self):
         return f"<{self._struct_type} id='{self.id}'>"

@@ -10,7 +10,7 @@ from .models import Geometry, \
     Obat, \
     Organization, \
     Project, \
-    WeatherSeries
+    Weather
 
 
 class OSSClient:

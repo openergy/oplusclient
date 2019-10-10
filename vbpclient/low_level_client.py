@@ -107,6 +107,21 @@ class LowLevelClient:
         bytes or None
         """
         download_url = self.detail_route(resource, resource_id, "GET", detail_route)["blob_url"]
+        return self._download(download_url, path=path)
+
+    def export(self, resource, resource_id, detail_route="export_data", export_format=None, params=None, path=None):
+        params = dict() if params is None else params
+        if export_format is not None:
+            params["export_format"] = export_format
+        response = self.detail_route(resource, resource_id, "GET", detail_route, params=params)
+        export_task = Task(response["user_task"], self)
+        success = export_task.wait_for_completion(period=0)
+        if not success:
+            raise RuntimeError(f"Import failed. Error:\n{export_task.message}\n{export_task.response['_out_text']}")
+        download_url = export_task.response["data"]["blob_url"]
+        return self._download(download_url, path=path)
+
+    def _download(self, download_url, path=None):
         response = self.upload_client.get(
             download_url
         )

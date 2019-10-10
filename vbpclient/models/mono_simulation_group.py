@@ -1,7 +1,7 @@
 from ..conf import Route
 from ..tasker import Task
 from ..exceptions import SimulationError, ResourceNotFound
-from . import ProjectChild, WeatherSeries, Geometry, Obat, Simulation
+from . import ProjectChild, Weather, Geometry, Obat, Simulation
 
 
 class MonoSimulationGroup(ProjectChild):
@@ -13,7 +13,7 @@ class MonoSimulationGroup(ProjectChild):
         project = self.get_project()
 
         if "config_weather" in data:
-            data["config_weather"] = WeatherSeries.get_id(project, data["config_weather"])
+            data["config_weather"] = Weather.get_id(project, data["config_weather"])
 
         if "config_geometry" in data:
             data["config_geometry"] = Geometry.get_id(project, data["config_geometry"])
