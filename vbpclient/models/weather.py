@@ -19,7 +19,7 @@ class Weather(ProjectChild):
 
     def import_ow(self, path):
         self._client._dev_client.upload(Route.weather, self.id, path)
-        self._client._dev_client.import_data(Route.weather, self.id, "epw")
+        self._client._dev_client.import_data(Route.weather, self.id, "ow")
 
     def import_epw(self, path):
         """

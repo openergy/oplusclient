@@ -5,6 +5,7 @@ class Route:
     task = "osstasks/user_tasks"
     floorspace = "ossgeometry/floorspaces"
     obat = "ossbat/obats"
+    obat_content = "ossbat/obat_contents"
     weather = "ossweather/weathers"
     generic_weather_series = "ossweather/generic_weather_series"
     historical_weather_series = "ossweather/historical_weather_series"

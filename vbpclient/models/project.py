@@ -70,6 +70,15 @@ class Project(APIMapping):
         return self._iter_child(Geometry, **params)
 
     def list_geometry(self, **params):
+        """
+        Parameters
+        ----------
+        params
+
+        Returns
+        -------
+        typing.List[Geometry]
+        """
         return list(self.iter_geometry(**params))
 
     def create_obat(self, name, **data):
@@ -93,6 +102,15 @@ class Project(APIMapping):
         return self._iter_child(Obat, **params)
 
     def list_obat(self, **params):
+        """
+        Parameters
+        ----------
+        params
+
+        Returns
+        -------
+        typing.List[Obat]
+        """
         return list(self.iter_obat(**params))
 
     def create_weather(self, name, **data):
@@ -118,7 +136,16 @@ class Project(APIMapping):
         return self._iter_child(Weather, **params)
 
     def list_weather(self, **params):
-        return list(self.iter_weather_series(**params))
+        """
+        Parameters
+        ----------
+        params
+
+        Returns
+        -------
+        typing.List[Weather]
+        """
+        return list(self.iter_weather(**params))
 
     def create_mono_simulation_group(self, name, **data):
         data["name"] = name

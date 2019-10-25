@@ -28,3 +28,8 @@ class Geometry(ProjectChild):
         if self.empty:
             raise ValueError("Geometry is empty, cannot download Ogw. Please import first.")
         return self._client._dev_client.download(Route.geometry, self.id, path=path)
+
+    def download_floorspace(self, path=None):
+        if self.format != "floorspace":
+            raise ValueError("Cannot download floorspace if the geometry format is not floorspace")
+        return self._client._dev_client.download(Route.floorspace, self.floorspace, path=path, detail_route="read_blob_url")
