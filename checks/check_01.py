@@ -106,6 +106,15 @@ while True:
         break
     time.sleep(3)
 
+print(simulation.get_out_hourly().shape)  # beware, can be quite big
+print(simulation.get_out_zones().shape)
+print(simulation.get_out_monthly_consumption().shape)
+print(simulation.get_out_envelope().shape)
+print(simulation.get_out_monthly_comfort().shape)
+print(simulation.get_out_monthly_miscellaneous().shape)
+print(simulation.get_out_monthly_thermal_balance().shape)
+print(simulation.get_out_monthly_weather().shape)
+
 # cleaning up
 wprint("deleting project...")
 project.destroy()
