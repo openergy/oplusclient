@@ -50,17 +50,6 @@ print("done")
 wprint("listing geometry...")
 print(f"{len(project.list_geometry())} found, done.")
 
-wprint("updating geometry site info...")
-geometry.update(
-    site_latitude=48,
-    site_longitude=2,
-    site_altitude=46,
-    site_country_code="FR",
-    site_postal_code="75004",
-    site_time_zone_ref="Europe/Paris"
-)
-print("done")
-
 wprint("creating obat...")
 obat = project.create_obat("3zones_cta")
 print("done")
@@ -70,11 +59,26 @@ obat.import_excel("resources/test.xlsx")
 print("done")
 
 wprint("uploading and importing generic weather series...")
-generic_weather_series = project.create_weather_series("test_weather")
+weather = project.create_weather("test_weather", format="generic")
+print("done")
+
+wprint("updating site information...")
+weather.update(
+    location_latitude=0,
+    location_longitude=0,
+    location_altitude=0,
+    location_time_zone_ref="Europe/Paris",
+    sizing=dict(method="rt2012", data=dict(department="75", is_coast=False)),
+    site_conditions=dict(method="monthly_triplets", data={
+        "heated_ground_temperatures": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "undisturbed_ground_temperatures": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "water_temperatures": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    })
+)
 print("done")
 
 wprint("uploading and importing epw weather file...")
-generic_weather_series.import_epw("resources/test.epw")
+weather.import_epw("resources/test.epw")
 print("done")
 
 wprint("creating mono simulation group...")
@@ -86,7 +90,7 @@ mono_simulation_group.update(
     config_geometry=geometry,
     config_start="2012-01-01T00:00:00",
     config_end="2012-12-31T23:00:00",
-    config_weather=generic_weather_series,
+    config_weather=weather,
     config_obat=obat,
 )
 print("done")

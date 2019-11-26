@@ -27,7 +27,11 @@ class Simulation(APIMapping):
         ).decode("utf-8")))
 
     def get_out_hourly(self):
-        return self._get_result("hourly_csv")
+        return pd.read_csv(io.BytesIO(self._client._dev_client.download(
+            self._resource,
+            self.id,
+            detail_route="hourly_csv"
+        )), compression="zip")
 
     def get_out_envelope(self):
         return self._get_result("out_envelope")
