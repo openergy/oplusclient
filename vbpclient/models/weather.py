@@ -29,6 +29,14 @@ class Weather(ProjectChild):
         self._client._dev_client.upload(route, series_id, path)
         self._client._dev_client.import_data(route, series_id, "epw")
 
+    def import_csv(self, path, sep=",", decimal="."):
+        """
+        uploads and imports Epw weather file.
+        """
+        route, series_id = self._get_series_route_and_id()
+        self._client._dev_client.upload(route, series_id, path)
+        self._client._dev_client.import_data(route, series_id, "csv", csv_separator=sep, csv_decimal=decimal)
+
     def download_csv(self, path=None):
         route, series_id = self._get_series_route_and_id()
         return self._client._dev_client.export(route, series_id, export_format="csv", path=path)
