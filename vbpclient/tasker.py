@@ -66,7 +66,7 @@ class Task:
             self.reload()
         return self._response["message"]
 
-    def wait_for_completion(self, period=0):
+    def wait_for_completion(self, period=100):
         """
         Method to reload data until task finishes.
 

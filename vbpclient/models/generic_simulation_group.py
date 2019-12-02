@@ -24,7 +24,7 @@ class GenericSimulationGroup(ProjectChild):
         if response:
             task_id = response["user_task"]
             simulation_task = Task(task_id, self._client._dev_client)
-            success = simulation_task.wait_for_completion(period=500)
+            success = simulation_task.wait_for_completion(period=100)
             if not success:
                 raise SimulationError("Errors encountered while starting simulations.")
         return self.get_simulations()

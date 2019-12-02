@@ -83,7 +83,7 @@ class LowLevelClient:
         if response:
             task_id = response["user_task"]
             import_task = Task(task_id, self)
-            success = import_task.wait_for_completion(period=500)
+            success = import_task.wait_for_completion(period=100)
             if not success:
                 raise RuntimeError(
                     f"Import failed. Error:\n"
@@ -115,7 +115,7 @@ class LowLevelClient:
             params["export_format"] = export_format
         response = self.detail_route(resource, resource_id, "GET", detail_route, params=params)
         export_task = Task(response["user_task"], self)
-        success = export_task.wait_for_completion(period=0)
+        success = export_task.wait_for_completion(period=100)
         if not success:
             raise RuntimeError(f"Import failed. Error:\n{export_task.message}\n{export_task.response['_out_text']}")
         download_url = export_task.response["data"]["blob_url"]

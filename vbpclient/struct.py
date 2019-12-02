@@ -122,7 +122,7 @@ class APIMapping:
         task_id = self._client._dev_client.destroy(self._resource, self.id)
         if task_id:
             destroy_task = Task(task_id, self._client._dev_client)
-            success = destroy_task.wait_for_completion(period=0)
+            success = destroy_task.wait_for_completion(period=100)
             if not success:
                 raise RuntimeError(f"{self._struct_type} could not be removed.\n"
                                    f"{destroy_task.message}\n"
