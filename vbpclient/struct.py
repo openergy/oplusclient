@@ -2,6 +2,8 @@ import json
 
 from .tasker import Task
 
+import vbpclient
+
 
 class FrozenClass:
     """
@@ -68,7 +70,7 @@ class APIMapping:
     _resource = "/" # this is just a placeholder, absolutely must be subclassed. so maybe None.
     _json_data = dict()
 
-    def __init__(self, data_dict, client):
+    def __init__(self, data_dict, client: "vbpclient.OSSClient"):
         """
         Parameters
         ----------
