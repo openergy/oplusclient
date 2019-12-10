@@ -72,5 +72,3 @@ class MonoSimulationGroup(ProjectChild):
         if len(candidates) != 1:
             raise ResourceNotFound(f"Simulation not be found.")
         return Simulation(candidates[0], self._client, resource)
-
-

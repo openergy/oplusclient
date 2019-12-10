@@ -100,15 +100,7 @@ simulation = mono_simulation_group.run_simulation()
 print("done")
 
 print("waiting for simulation...")
-while True:
-    simulation.reload()
-    if simulation.status != "running":
-        print("\n")
-        print("SIMULATION FINISHED RUNNING")
-        print(f"status: {simulation.status}")
-        print(f"stdout: {simulation.logs}")
-        break
-    time.sleep(3)
+simulation.wait_for_completion(print_logs=True)
 
 print(simulation.get_out_hourly().shape)  # beware, can be quite big
 print(simulation.get_out_zones().shape)
