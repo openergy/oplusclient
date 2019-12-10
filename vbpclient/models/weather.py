@@ -14,29 +14,62 @@ class Weather(ProjectChild):
         else:
             raise ValueError("Unknown format")
 
-    def download_ow(self, path=None):
-        return self._client._dev_client.export(Route.weather, self.id, "export_data", path=path)
-
-    def import_ow(self, path):
-        self._client._dev_client.upload(Route.weather, self.id, path)
-        self._client._dev_client.import_data(Route.weather, self.id, "ow")
-
-    def import_epw(self, path):
+    def import_file(self, buffer_or_path, import_format="ow", csv_separator=",", csv_decimal="."):
         """
-        uploads and imports Epw weather file.
-        """
-        route, series_id = self._get_series_route_and_id()
-        self._client._dev_client.upload(route, series_id, path)
-        self._client._dev_client.import_data(route, series_id, "epw")
+        Upload and import an obat file to the platform
 
-    def import_csv(self, path, sep=",", decimal="."):
+        Parameters
+        ----------
+        import_format: str
+            format of the file ('csv', 'epw' or 'ow')
+        buffer_or_path: str
+            path to the file
+        csv_separator: str
+            separator used if the import_format is a csv file
+        csv_decimal: str
+            decimal used if the import_format is a csv file
         """
-        uploads and imports csv weather file.
-        """
-        route, series_id = self._get_series_route_and_id()
-        self._client._dev_client.upload(route, series_id, path)
-        self._client._dev_client.import_data(route, series_id, "csv", csv_separator=sep, csv_decimal=decimal)
+        if import_format == "ow":
+            self._client.dev_client.upload(Route.weather, self.id, buffer_or_path=buffer_or_path)
+            self._client.dev_client.import_data(Route.weather, self.id, "ow")
+        else:
+            route, series_id = self._get_series_route_and_id()
+            self._client.dev_client.upload(route, series_id, buffer_or_path)
+            self._client.dev_client.import_data(
+                route,
+                series_id,
+                import_format,
+                csv_separator=csv_separator,
+                csv_decimal=csv_decimal
+            )
 
-    def download_csv(self, path=None):
-        route, series_id = self._get_series_route_and_id()
-        return self._client._dev_client.export(route, series_id, export_format="csv", path=path)
+    def export(self, export_format, buffer_or_path=None, csv_separator=",", csv_decimal="."):
+        """
+        Exports obat to specified format
+
+        Parameters
+        ----------
+        export_format: str
+        buffer_or_path: BytesIO like or string
+        csv_separator: str
+            separator used if the import_format is a csv file
+        csv_decimal: str
+            decimal used if the import_format is a csv file
+
+        Returns
+        -------
+        bytes
+        """
+        if export_format == "ow":
+            return self._client.dev_client.export(Route.weather, self.id, "export_data", buffer_or_path=buffer_or_path)
+        else:
+            route, series_id = self._get_series_route_and_id()
+            return self._client.dev_client.export(
+                route,
+                series_id,
+                export_format=export_format,
+                buffer_or_path=buffer_or_path,
+                csv_separator=csv_separator,
+                csv_decimal=csv_decimal
+            )
+

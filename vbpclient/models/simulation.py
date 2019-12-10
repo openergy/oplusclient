@@ -26,7 +26,7 @@ class Simulation(APIMapping):
                 "Results are only available if the simulation finished successfully. However its status is"
                 f" {self.status}."
             )
-        return pd.read_csv(io.StringIO(self._client._dev_client.download(
+        return pd.read_csv(io.StringIO(self._client.dev_client.download(
             self._resource,
             self.id,
             detail_route=detail_route

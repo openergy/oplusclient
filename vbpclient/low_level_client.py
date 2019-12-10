@@ -2,7 +2,7 @@ import os
 import requests
 
 from .rest_api_client import RESTClient
-from .tasker import Task
+from .task import Task
 
 
 class LowLevelClient:
@@ -90,26 +90,41 @@ class LowLevelClient:
                     f"{import_task.message}"
                 )
 
-    def upload(self, resource, resource_id, path, detail_route="upload_url"):
+    def upload(self, resource, resource_id, buffer_or_path, detail_route="upload_url"):
         upload_url = self.detail_route(resource, resource_id, "GET", detail_route)["blob_url"]
-        with open(os.path.realpath(path), "rb") as f:
+        if hasattr(buffer_or_path, "read"):
             response = self.upload_client.put(
                 upload_url,
-                f.read(),
+                buffer_or_path.read(),
                 headers={"x-ms-blob-type": "BlockBlob"}
             )
-            self.client.check_rep(response)
+        else:
+            with open(os.path.realpath(buffer_or_path), "rb") as f:
+                response = self.upload_client.put(
+                    upload_url,
+                    f.read(),
+                    headers={"x-ms-blob-type": "BlockBlob"}
+                )
+        self.client.check_rep(response)
 
-    def download(self, resource, resource_id, detail_route="blob_url", path=None):
+    def download(self, resource, resource_id, detail_route="blob_url", buffer_or_path=None):
         """
         Returns
         -------
         bytes or None
         """
         download_url = self.detail_route(resource, resource_id, "GET", detail_route)["blob_url"]
-        return self._download(download_url, path=path)
+        return self._download(download_url, buffer_or_path=buffer_or_path)
 
-    def export(self, resource, resource_id, detail_route="export_data", export_format=None, params=None, path=None):
+    def export(
+            self,
+            resource,
+            resource_id,
+            detail_route="export_data",
+            export_format=None,
+            params=None,
+            buffer_or_path=None
+    ):
         params = dict() if params is None else params
         if export_format is not None:
             params["export_format"] = export_format
@@ -119,23 +134,29 @@ class LowLevelClient:
         if not success:
             raise RuntimeError(f"Import failed. Error:\n{export_task.message}\n{export_task.response['_out_text']}")
         download_url = export_task.response["data"]["blob_url"]
-        return self._download(download_url, path=path)
+        return self._download(download_url, buffer_or_path=buffer_or_path)
 
-    def _download(self, download_url, path=None):
+    def _download(self, download_url, buffer_or_path=None):
         response = self.upload_client.get(
             download_url
         )
         if isinstance(response.content, bytes):
-            if path is None:
+            if buffer_or_path is None:
                 return response.content
             else:
-                with open(path, "wb") as f:
-                    f.write(response.content)
+                if hasattr(buffer_or_path, "write"):
+                    buffer_or_path.write(response.content)
+                else:
+                    with open(buffer_or_path, "wb") as f:
+                        f.write(response.content)
         elif isinstance(response.content, str):
-            if path is None:
+            if buffer_or_path is None:
                 return response.content.encode("utf-8")
             else:
-                with open(path, "w") as f:
-                    f.write(response.content)
+                if hasattr(buffer_or_path, "write"):
+                    buffer_or_path.write(response.content)
+                else:
+                    with open(buffer_or_path, "w") as f:
+                        f.write(response.content)
         else:
             raise ValueError("Response content is neither str nor bytes")
