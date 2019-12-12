@@ -79,16 +79,29 @@ class GenericSimulationGroup(ProjectChild):
             return_json=False
         )
 
-    def get_simulations(self):
+    def get_simulations(self, status=None):
         """
         Get a list of the simulations in the simulation group
+
+        Parameters
+        ----------
+        status: str
+            filter on the simulation status
 
         Returns
         -------
         typing.List[Simulation]
         """
         resource = self._simulations_resource.format(self.id)
-        candidates = self._client.dev_client.list(resource)
-        return [Simulation(c, self._client, resource) for c in candidates]
+        next_marker = None
+        while True:
+            resp = self._client.dev_client.client.list(resource, params=dict(status=status, next_marker=next_marker))
+            candidates = resp["data"]
+            next_marker = resp["next_marker"]
+            for c in candidates:
+                yield Simulation(c, self._client, resource)
+            if next_marker is None:
+                break
 
-
+    def get_simulations_list(self, status=None):
+        return list(self.get_simulations(status=status))
