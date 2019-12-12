@@ -90,7 +90,7 @@ class GenericSimulationGroup(ProjectChild):
 
         Returns
         -------
-        typing.List[Simulation]
+        typing.Generator[Simulation]
         """
         resource = self._simulations_resource.format(self.id)
         next_marker = None
@@ -104,4 +104,16 @@ class GenericSimulationGroup(ProjectChild):
                 break
 
     def get_simulations_list(self, status=None):
+        """
+        Get a list of the simulations in the simulation group
+
+        Parameters
+        ----------
+        status: str
+            filter on the simulation status
+
+        Returns
+        -------
+        typing.List[Simulation]
+        """
         return list(self.get_simulations(status=status))
