@@ -69,7 +69,6 @@ class Weather(ProjectChild):
                 series_id,
                 export_format=export_format,
                 buffer_or_path=buffer_or_path,
-                csv_separator=csv_separator,
-                csv_decimal=csv_decimal
+                params=dict(csv_separator=csv_separator, csv_decimal=csv_decimal)
             )
 
