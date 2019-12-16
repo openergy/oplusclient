@@ -8,9 +8,13 @@ class Weather(ProjectChild):
 
     def _get_series_route_and_id(self):
         if self.format == "generic":
-            return Route.generic_weather_series, self.generic_weather_series
+            return Route.generic_weather_series, \
+                   (self.generic_weather_series if isinstance(self.generic_weather_series, str) else
+                    self.generic_weather_series.id)
         elif self.format == "historical":
-            return Route.historical_weather_series, self.historical_weather_series
+            return Route.historical_weather_series, \
+                   (self.historical_weather_series if isinstance(self.historical_weather_series, str) else
+                    self.historical_weather_series.id)
         else:
             raise ValueError("Unknown format")
 
