@@ -40,3 +40,8 @@ class Weather(ProjectChild):
     def download_csv(self, path=None):
         route, series_id = self._get_series_route_and_id()
         return self._client._dev_client.export(route, series_id, export_format="csv", path=path)
+
+    def clear_weather_series(self):
+        route, series_id = self._get_series_route_and_id()
+        self._client._dev_client.detail_route(route, series_id, "delete", "clear", return_json=False)
+
