@@ -22,7 +22,7 @@ class Project(APIMapping):
         if "project" in data:
             raise ValueError(f"Cannot pass a project id, using '{self.id}'.")
         data["project"] = self.id
-        json_data = self._client._dev_client.create(cls._resource, data)
+        json_data = self._client.dev_client.create(cls._resource, data)
         return cls(json_data, self._client)
 
     def _get_child(self, cls, name):

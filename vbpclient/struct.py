@@ -1,6 +1,6 @@
 import json
 
-from .tasker import Task
+from .task import Task
 
 import vbpclient
 
@@ -96,7 +96,7 @@ class APIMapping:
 
     @classmethod
     def _dev_iter(cls, client, **params):
-        json_data = client._dev_client.list_iter_all(cls._resource, params=params)
+        json_data = client.dev_client.list_iter_all(cls._resource, params=params)
         return (
             cls(element, client) for element in json_data
         )
@@ -110,20 +110,20 @@ class APIMapping:
         return self._json_data.keys()
 
     def reload(self):
-        refreshed_data = self._client._dev_client.retrieve(self._resource, self.id)
+        refreshed_data = self._client.dev_client.retrieve(self._resource, self.id)
         if not self._json_data == refreshed_data:
             self._json_data = refreshed_data
             self._struct_data = Struct(refreshed_data)
 
     def update(self, **data):
-        updated_data = self._client._dev_client.partial_update(self._resource, self.id, data)
+        updated_data = self._client.dev_client.partial_update(self._resource, self.id, data)
         self._json_data = updated_data
         self._struct_data = Struct(updated_data)
 
     def destroy(self):
-        task_id = self._client._dev_client.destroy(self._resource, self.id)
+        task_id = self._client.dev_client.destroy(self._resource, self.id)
         if task_id:
-            destroy_task = Task(task_id, self._client._dev_client)
+            destroy_task = Task(task_id, self._client.dev_client)
             success = destroy_task.wait_for_completion(period=100)
             if not success:
                 raise RuntimeError(f"{self._struct_type} could not be removed.\n"

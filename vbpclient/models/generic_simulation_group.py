@@ -1,7 +1,7 @@
 from ..conf import Route
-from ..tasker import Task
-from ..exceptions import SimulationError, ResourceNotFound
-from . import ProjectChild, Weather, Geometry, Obat, Simulation
+from ..task import Task
+from ..exceptions import SimulationError
+from . import ProjectChild, Simulation
 
 
 class GenericSimulationGroup(ProjectChild):
@@ -11,9 +11,18 @@ class GenericSimulationGroup(ProjectChild):
 
     def run(self, force=False):
         """
-        Method to run the simulation group
+        Runs the simulation
+
+        Parameters
+        ----------
+        force: bool
+            If force, the simulation group runs even if the simulation group is not empty or obsolete
+
+        Returns
+        -------
+        typing.List[Simulation]
         """
-        response = self._client._dev_client.detail_route(
+        response = self._client.dev_client.detail_route(
             Route.simulation_group,
             self.id,
             "POST",
@@ -23,14 +32,26 @@ class GenericSimulationGroup(ProjectChild):
         )
         if response:
             task_id = response["user_task"]
-            simulation_task = Task(task_id, self._client._dev_client)
+            simulation_task = Task(task_id, self._client.dev_client)
             success = simulation_task.wait_for_completion(period=100)
             if not success:
                 raise SimulationError("Errors encountered while starting simulations.")
         return self.get_simulations()
 
     def add_simulation(self, **data):
-        response = self._client._dev_client.detail_route(
+        """
+        Add a simulation to the group
+
+        Parameters
+        ----------
+        data: dict
+            Simulation data
+
+        Returns
+        -------
+        Simulation
+        """
+        response = self._client.dev_client.detail_route(
             Route.generic_simulation_group,
             self.id,
             "POST",
@@ -40,9 +61,16 @@ class GenericSimulationGroup(ProjectChild):
         return Simulation(response, self._client, self._simulations_resource.format(self.id))
 
     def delete_simulation(self, simulation):
+        """
+        Delete simulation from the group
+
+        Parameters
+        ----------
+        simulation: Simulation
+        """
         if not isinstance(simulation, Simulation):
             raise ValueError("simulation must be a Simulation instance")
-        self._client._dev_client.detail_route(
+        self._client.dev_client.detail_route(
             Route.generic_simulation_group,
             self.id,
             "DELETE",
@@ -51,9 +79,41 @@ class GenericSimulationGroup(ProjectChild):
             return_json=False
         )
 
-    def get_simulations(self):
+    def get_simulations(self, status=None):
+        """
+        Get a list of the simulations in the simulation group
+
+        Parameters
+        ----------
+        status: str
+            filter on the simulation status
+
+        Returns
+        -------
+        typing.Generator[Simulation]
+        """
         resource = self._simulations_resource.format(self.id)
-        candidates = self._client._dev_client.list(resource)
-        return [Simulation(c, self._client, resource) for c in candidates]
+        next_marker = None
+        while True:
+            resp = self._client.dev_client.client.list(resource, params=dict(status=status, next_marker=next_marker))
+            candidates = resp["data"]
+            next_marker = resp["next_marker"]
+            for c in candidates:
+                yield Simulation(c, self._client, resource)
+            if next_marker is None:
+                break
 
+    def get_simulations_list(self, status=None):
+        """
+        Get a list of the simulations in the simulation group
 
+        Parameters
+        ----------
+        status: str
+            filter on the simulation status
+
+        Returns
+        -------
+        typing.List[Simulation]
+        """
+        return list(self.get_simulations(status=status))

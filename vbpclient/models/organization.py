@@ -33,7 +33,7 @@ class Organization(APIMapping):
             raise ValueError(f"Cannot pass an organization id, using '{self.id}'.")
         data["organization"] = self.id
         data["name"] = name
-        json_data = self._client._dev_client.create("oteams/projects", data)
+        json_data = self._client.dev_client.create("oteams/projects", data)
         return Project(json_data, self._client)
 
     def __repr__(self):

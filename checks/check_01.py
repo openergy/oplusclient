@@ -13,7 +13,7 @@ url_path = os.path.join(dir_path, "..", "url_path.txt")
 wprint = functools.partial(print, end="")
 
 wprint("authenticating to client...")
-client = OSSClient(auth_path=auth_path, url_path=url_path)
+client = OSSClient(auth_path=auth_path, url="https://test-ossplatform.openergy.fr")
 # client = OSSClient(auth_path=auth_path, url="http://localhost:8000")
 print("done")
 
@@ -39,12 +39,12 @@ geometry = project.create_geometry("3zones_cta", "floorspace")
 print("done")
 
 wprint("uploading and importing floorspace...")
-geometry.import_geometry("resources/test.flo")
+geometry.import_file("resources/test.flo")
 print("done")
 
 wprint("uploading and importing ogw...")
 ogw_geom = project.create_geometry("ogw_test", "import")
-ogw_geom.import_geometry("/home/zach/Downloads/8e88cf61-5be5-45fa-a948-4034c2a1b9d8.ogw", format="ogw")
+ogw_geom.import_file("/home/zach/Downloads/8e88cf61-5be5-45fa-a948-4034c2a1b9d8.ogw")
 print("done")
 
 wprint("listing geometry...")
@@ -55,7 +55,7 @@ obat = project.create_obat("3zones_cta")
 print("done")
 
 wprint("uploading and importing obat excel...")
-obat.import_excel("resources/test.xlsx")
+obat.import_file("resources/test.xlsx", import_format="xlsx")
 print("done")
 
 wprint("uploading and importing generic weather series...")
@@ -78,7 +78,7 @@ weather.update(
 print("done")
 
 wprint("uploading and importing epw weather file...")
-weather.import_epw("resources/test.epw")
+weather.import_file("resources/test.epw", import_format="epw")
 print("done")
 
 wprint("creating mono simulation group...")
@@ -96,19 +96,11 @@ mono_simulation_group.update(
 print("done")
 
 wprint("starting simulation...")
-simulation = mono_simulation_group.start_simulation()
+simulation = mono_simulation_group.run_simulation()
 print("done")
 
 print("waiting for simulation...")
-while True:
-    simulation.reload()
-    if simulation.status != "running":
-        print("\n")
-        print("SIMULATION FINISHED RUNNING")
-        print(f"status: {simulation.status}")
-        print(f"stdout: {simulation.logs}")
-        break
-    time.sleep(3)
+simulation.wait_for_completion(print_logs=True)
 
 print(simulation.get_out_hourly().shape)  # beware, can be quite big
 print(simulation.get_out_zones().shape)
