@@ -56,9 +56,9 @@ class Weather(ProjectChild):
         export_format: str
         buffer_or_path: BytesIO like or string
         csv_separator: str
-            separator used if the import_format is a csv file
+            separator used if the export_format is a csv file
         csv_decimal: str
-            decimal used if the import_format is a csv file
+            decimal used if the export_format is a csv file
 
         Returns
         -------
@@ -76,8 +76,6 @@ class Weather(ProjectChild):
                 params=dict(csv_separator=csv_separator, csv_decimal=csv_decimal)
             )
 
-
     def clear_weather_series(self):
         route, series_id = self._get_series_route_and_id()
         self._client._dev_client.detail_route(route, series_id, "delete", "clear", return_json=False)
-
