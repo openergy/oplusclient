@@ -1,0 +1,177 @@
+{
+  "__version__": "2.0.0",
+  "general": [
+    {
+      "id": "main",
+      "rules_orientation": 0.0,
+      "rules_reference_surface": null,
+      "ref": "floorplan.flo",
+      "site_address": null
+    }
+  ],
+  "shading": [],
+  "subsurface": [],
+  "surface": [
+    {
+      "id": "floor_0",
+      "ref": "floor_0",
+      "vertex_indices": [
+        0,
+        2,
+        3,
+        1
+      ],
+      "type": "floor",
+      "inner_zone": "etage_0_zone_0_1",
+      "inner_shading": null,
+      "outer_condition": "ground",
+      "outer_zone": null,
+      "virtual": false,
+      "area": 714.0,
+      "raw_orientation": null
+    },
+    {
+      "id": "roof_0",
+      "ref": "roof_0",
+      "vertex_indices": [
+        5,
+        7,
+        6,
+        4
+      ],
+      "type": "roof",
+      "inner_zone": "etage_0_zone_0_1",
+      "inner_shading": null,
+      "outer_condition": "outdoor",
+      "outer_zone": null,
+      "virtual": false,
+      "area": 714.0,
+      "raw_orientation": null
+    },
+    {
+      "id": "wall_0",
+      "ref": "wall_0",
+      "vertex_indices": [
+        1,
+        3,
+        7,
+        5
+      ],
+      "type": "wall",
+      "inner_zone": "etage_0_zone_0_1",
+      "inner_shading": null,
+      "outer_condition": "outdoor",
+      "outer_zone": null,
+      "virtual": false,
+      "area": 102.0,
+      "raw_orientation": 0.0
+    },
+    {
+      "id": "wall_1",
+      "ref": "wall_1",
+      "vertex_indices": [
+        3,
+        2,
+        6,
+        7
+      ],
+      "type": "wall",
+      "inner_zone": "etage_0_zone_0_1",
+      "inner_shading": null,
+      "outer_condition": "outdoor",
+      "outer_zone": null,
+      "virtual": false,
+      "area": 63.0,
+      "raw_orientation": 90.0
+    },
+    {
+      "id": "wall_2",
+      "ref": "wall_2",
+      "vertex_indices": [
+        2,
+        0,
+        4,
+        6
+      ],
+      "type": "wall",
+      "inner_zone": "etage_0_zone_0_1",
+      "inner_shading": null,
+      "outer_condition": "outdoor",
+      "outer_zone": null,
+      "virtual": false,
+      "area": 102.0,
+      "raw_orientation": 180.0
+    },
+    {
+      "id": "wall_3",
+      "ref": "wall_3",
+      "vertex_indices": [
+        0,
+        1,
+        5,
+        4
+      ],
+      "type": "wall",
+      "inner_zone": "etage_0_zone_0_1",
+      "inner_shading": null,
+      "outer_condition": "outdoor",
+      "outer_zone": null,
+      "virtual": false,
+      "area": 63.0,
+      "raw_orientation": 270.0
+    }
+  ],
+  "zone": [
+    {
+      "id": "etage_0_zone_0_1",
+      "ref": "etage_0_zone_0_1",
+      "name": "zone_0_1",
+      "tag_zg1": null,
+      "tag_zg2": null,
+      "tag_story": "etage_0",
+      "volume": 2142.0
+    }
+  ],
+  "vertex": [
+    [
+      -149,
+      68,
+      0
+    ],
+    [
+      -149,
+      89,
+      0
+    ],
+    [
+      -115,
+      68,
+      0
+    ],
+    [
+      -115,
+      89,
+      0
+    ],
+    [
+      -149,
+      68,
+      3
+    ],
+    [
+      -149,
+      89,
+      3
+    ],
+    [
+      -115,
+      68,
+      3
+    ],
+    [
+      -115,
+      89,
+      3
+    ]
+  ]
+}

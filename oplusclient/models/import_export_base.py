@@ -13,14 +13,14 @@ class ImportExportBaseModel(BaseModel):
 
     def _import(self, import_format, **kwargs):
         response = self.detail_action(
-            "PATCH",
             "import_data",
+            "PATCH",
             data=dict(import_format=import_format, **kwargs),
         )
         if response:
             task_id = response["user_task"]
-            import_task = Task(task_id, self)
-            success = import_task.wait_for_completion(period=100)
+            import_task = Task(task_id, self.client.rest_client)
+            success = import_task.wait_for_completion()
             if not success:
                 raise RuntimeError(
                     f"Import failed. Error:\n"
@@ -29,9 +29,7 @@ class ImportExportBaseModel(BaseModel):
 
     def _export(
             self,
-            resource,
-            resource_id,
-            detail_route="export_data",
+            path="export_data",
             export_format=None,
             params=None,
             buffer_or_path=None
@@ -39,10 +37,10 @@ class ImportExportBaseModel(BaseModel):
         params = dict() if params is None else params
         if export_format is not None:
             params["export_format"] = export_format
-        response = self.detail_action(resource, resource_id, "GET", detail_route, params=params)
-        export_task = Task(response["user_task"], self)
-        success = export_task.wait_for_completion(period=100)
+        response = self.detail_action(path, "GET", params=params)
+        export_task = Task(response["user_task"], self.client.rest_client)
+        success = export_task.wait_for_completion()
         if not success:
             raise RuntimeError(f"Import failed. Error:\n{export_task.message}\n{export_task.response['_out_text']}")
         download_url = export_task.response["data"]["blob_url"]
-        return self.client.dev_client.download(download_url, buffer_or_path=buffer_or_path)
+        return self.client.rest_client.download(download_url, buffer_or_path=buffer_or_path)

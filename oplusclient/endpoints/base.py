@@ -32,7 +32,7 @@ class BaseEndpoint:
         if offset > 0:
             params["start"] = offset
         records_data = self.client.rest_client.list(
-            self.route, params=dict(limit=limit, offset=offset, **filter_by, **extra_params)
+            self.route, params=params
         )["data"]
         return [self.data_to_record(data) for data in records_data]
 
@@ -54,12 +54,12 @@ class BaseEndpoint:
         else:
             raise RuntimeError(f"maximum iteration was reached ({self.MAX_ITERATIONS}), stopping")
 
-    def create(self, *data, **or_data):
-        rep_data = self.client.rest_client.create(self.route, or_data if len(data) == 0 else data)
+    def create(self, **data):
+        rep_data = self.client.rest_client.create(self.route, data)
         return self.data_to_record(rep_data)
 
     def retrieve(self, record_id, params=None):
-        rep_data = self.client.rest_client.retrieve(self.route, record_id, params=params)[self.route]
+        rep_data = self.client.rest_client.retrieve(self.route, record_id, params=params)
         return self.data_to_record(rep_data)
 
 

@@ -1,4 +1,5 @@
 from getpass import getpass
+import textwrap
 import os
 import datetime as dt
 import json
@@ -7,8 +8,7 @@ import base64
 import requests
 from requests.auth import AuthBase
 
-from .task import Task
-from .exceptions import InvalidToken
+from .exceptions import InvalidToken, HttpClientError, HttpServerError
 
 
 class RestClient:
@@ -24,12 +24,34 @@ class RestClient:
             self.base_url
         )
 
+    def close(self):
+        self._session.close()
+
+    @staticmethod
+    def _raise_for_status(response):
+        if response.status_code // 100 == 4:
+            try:
+                data = response.json()
+            except Exception:
+                pass
+            else:
+                if "errors" in data:
+                    error_msg = "\n"
+                    for key, errors_l in data["errors"].items():
+                        error_msg += f"{key}:\n"
+                        for error in errors_l:
+                            error_msg += textwrap.indent(f"{error['detailed_code']}: {error['message']}", "  ") + "\n"
+                    raise HttpClientError(error_msg)
+            raise HttpClientError(f"{response.status_code}: {response.text}")
+        elif response.status_code // 100 >= 5:
+            raise HttpServerError(f"{response.status_code}: {response.text}")
+
     def list(self, path, params=None):
         response = self._session.get(
             f"{self.base_url}/{path}",
             params=params
         )
-        response.raise_for_status()
+        self._raise_for_status(response)
         return response.json()
 
     def create(self, path, data):
@@ -37,7 +59,7 @@ class RestClient:
             f"{self.base_url}/{path}",
             json=data
         )
-        response.raise_for_status()
+        self._raise_for_status(response)
         return response.json()
 
     def retrieve(self, path, record_id, params=None):
@@ -45,7 +67,7 @@ class RestClient:
             f"{self.base_url}/{path}/{record_id}",
             params=params
         )
-        response.raise_for_status()
+        self._raise_for_status(response)
         return response.json()
 
     def update(self, path, record_id, data):
@@ -53,14 +75,22 @@ class RestClient:
             f"{self.base_url}/{path}/{record_id}",
             json=data
         )
-        response.raise_for_status()
+        self._raise_for_status(response)
+        return response.json()
+
+    def partial_update(self, path, record_id, data):
+        response = self._session.patch(
+            f"{self.base_url}/{path}/{record_id}",
+            json=data
+        )
+        self._raise_for_status(response)
         return response.json()
 
     def delete(self, path, resource_id):
         response = self._session.delete(
             f"{self.base_url}/{path}/{resource_id}"
         )
-        response.raise_for_status()
+        self._raise_for_status(response)
 
     def detail_action(self, path, record_id, action_name, method="get", data=None, params=None):
         response = self._session.request(
@@ -69,14 +99,14 @@ class RestClient:
             json=data,
             params=params
         )
-        response.raise_for_status()
+        self._raise_for_status(response)
         return response.json()
 
     def download(self, download_url, buffer_or_path=None):
         response = self._session.get(
             download_url
         )
-        response.raise_for_status()
+        self._raise_for_status(response)
         if isinstance(response.content, bytes):
             if buffer_or_path is None:
                 return response.content
@@ -112,7 +142,7 @@ class RestClient:
                     f.read(),
                     headers={"x-ms-blob-type": "BlockBlob"}
                 )
-        response.raise_for_status()
+        self._raise_for_status(response)
 
 
 class _JWTAuth(AuthBase):
@@ -123,9 +153,11 @@ class _JWTAuth(AuthBase):
         self._access_token, self._access_token_exp = self._get_access_token()
 
     def __call__(self, r):
-        if self._access_token_exp - dt.datetime.utcnow() < dt.timedelta(seconds=1):
-            self._access_token, self._access_token_exp = self._get_access_token()
-        r.headers["Authorization"] = f"Bearer {self._access_token}"
+        # no authentication for blobs
+        if not "blob.core.windows.net" in r.url:
+            if self._access_token_exp - dt.datetime.utcnow() < dt.timedelta(seconds=1):
+                self._access_token, self._access_token_exp = self._get_access_token()
+            r.headers["Authorization"] = f"Bearer {self._access_token}"
         return r
 
     def _get_access_token(self):

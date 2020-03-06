@@ -1,2 +1,3 @@
-# vbpclient
-Virtual Building Platform client
+# oplusclient
+
+A python client for Oplus

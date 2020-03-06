@@ -1,15 +1,14 @@
 import time
 
-from .conf import Route
-
 
 class Task:
+    route = "osstasks/user_tasks"
+
     def __init__(self, task_id, client):
         """
         Parameters
         ----------
-        task_id : int
-             Task identifier at `Route.task`
+        task_id : Route.task`
         client  : LowLevelClient
              Client used for API calls.
 
@@ -40,7 +39,7 @@ class Task:
         """
         Method to retrieve task information and update the object accordingly.
         """
-        self._response = self._client.retrieve(Route.task, self._task_id)
+        self._response = self._client.retrieve(self.route, self._task_id)
 
     @property
     def response(self):
@@ -66,7 +65,7 @@ class Task:
             self.reload()
         return self._response["message"]
 
-    def wait_for_completion(self, period=100):
+    def wait_for_completion(self, period=200):
         """
         Method to reload data until task finishes.
 
@@ -80,7 +79,7 @@ class Task:
         bool
           Task success state as indicated by the status code.
         """
-        ms = 0.001 * period
+        ms = 1e-3 * period
         while not self._response["finished"]:
             self.reload()
             time.sleep(ms)
