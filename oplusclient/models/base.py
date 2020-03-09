@@ -1,8 +1,6 @@
 class BaseModel:
     def __init__(self, endpoint, data):
-        # touchy imports
-        from ..endpoints import BaseEndpoint
-        self.endpoint: BaseEndpoint = endpoint
+        self.endpoint = endpoint
         self.client = self.endpoint.client
         self.data = data
 

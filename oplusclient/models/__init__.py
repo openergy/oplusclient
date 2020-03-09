@@ -10,3 +10,4 @@ from .weather import Weather
 from .simulation_group import SimulationGroup
 from .mono_simulation_group import MonoSimulationGroup
 from .multi_simulation_group import MultiSimulationGroup
+from .simulation import Simulation

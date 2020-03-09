@@ -23,9 +23,11 @@ class Client:
                                                       model_cls=models.ImportExportBaseModel)
 
         # simulations
-        self.simulation_group = BaseEndpoint(self, "osssimulations/simulation_groups")
-        self.multi_simulation_group = BaseEndpoint(self, "osssimulations/multi_simulation_groups")
-        self.mono_simulation_group = BaseEndpoint(self, "osssimulations/mono_simulation_groups")
+        self.simulation_group = BaseEndpoint(self, "osssimulations/simulation_groups", models.SimulationGroup)
+        self.multi_simulation_group = BaseEndpoint(self, "osssimulations/multi_simulation_groups",
+                                                   models.MultiSimulationGroup)
+        self.mono_simulation_group = BaseEndpoint(self, "osssimulations/mono_simulation_groups",
+                                                  models.MonoSimulationGroup)
 
         # oteams
         self.organization = BaseEndpoint(self, "oteams/organizations", model_cls=models.Organization)

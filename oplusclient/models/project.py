@@ -167,6 +167,7 @@ class Project(BaseModel):
         """
         return self._list_by_filter(self.client.weather)
 
+    # TODO: accept more input types ()
     def create_mono_simulation_group(
         self,
         name,
