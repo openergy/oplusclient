@@ -1,3 +1,5 @@
+import time
+
 from ..endpoints.simulation import SimulationEndpoint
 from .. import exceptions
 from ..task import Task
@@ -16,13 +18,30 @@ class SimulationGroup(BaseModel):
         Parameters
         ----------
         run_old_versions: bool
+        wait_for_start_task: bool
         """
         run_task = Task(
             self.detail_action("run", method="POST", params=dict(run_old_versions=run_old_versions))["user_task"],
             self.client.rest_client
         )
         if wait_for_start_task:
-            run_task.wait_for_completion()
+            if not run_task.wait_for_completion():
+                raise exceptions.OplusClientError(f"Could not start simulation. Message:\n{run_task.message}")
+
+    def wait_for_completion(self, period=200):
+        """
+        Wait for the simulation group to finish running
+
+        Parameters
+        ----------
+        period  : int
+            Number of milliseconds between successive data reloads.
+        """
+        ms = 1e-3 * period
+        self.reload()
+        while self.working:
+            time.sleep(ms)
+            self.reload()
 
     def iter_simulations(self, filter_by_status=None):
         """

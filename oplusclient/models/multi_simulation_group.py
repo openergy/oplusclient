@@ -1,10 +1,15 @@
 import io
 
 import pandas as pd
-from . import SimulationGroup, Weather, Geometry
+from . import SimulationGroup, Weather, Geometry, Obat
 
 
 class MultiSimulationGroup(SimulationGroup):
+    def update_obat(self, obat):
+        if isinstance(obat, Obat):
+            obat = obat.id
+        self.detail_action("update_obat", "PATCH", data=dict(obat=obat))
+
     def get_obat(self):
         return self._get_related("config_obat", self.client.obat)
 
@@ -90,7 +95,7 @@ class MultiSimulationGroup(SimulationGroup):
     def _get_result(self, detail_route):
         if not self.status == "success":
             raise ValueError(
-                "Results are only available if the simulation finished successfully. However its status is"
+                f"Results are only available if the simulation finished successfully. However its status is"
                 f" {self.status}."
             )
         download_url = self.detail_action(detail_route)["blob_url"]
