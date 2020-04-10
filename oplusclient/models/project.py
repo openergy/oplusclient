@@ -47,7 +47,7 @@ class Project(BaseModel):
         -------
         oplusclient.models.Geometry
         """
-        self._get_by_filter(self.client.geometry, name)
+        return self._get_by_filter(self.client.geometry, name)
 
     def list_geometries(self):
         """
@@ -225,7 +225,7 @@ class Project(BaseModel):
         -------
         oplusclient.models.MonoSimulationGroup
         """
-        self._get_by_filter(self.client.mono_simulation_group, name)
+        return self._get_by_filter(self.client.mono_simulation_group, name)
 
     def list_mono_simulation_groups(self):
         """
@@ -271,7 +271,7 @@ class Project(BaseModel):
         -------
         oplusclient.models.MultiSimulationGroup
         """
-        self._get_by_filter(self.client.multi_simulation_group, name)
+        return self._get_by_filter(self.client.multi_simulation_group, name)
 
     def list_multi_simulation_groups(self):
         """
