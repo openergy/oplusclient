@@ -7,6 +7,7 @@ license = "MPL-2.0"
 readme = "README.md"
 repository = "https://github.com/openergy/oplusclient"
 homepage = "https://github.com/openergy/oplusclient"
+include = ["oplusclient/tools/resources/empty_floorplan.flo"]
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
