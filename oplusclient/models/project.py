@@ -47,7 +47,7 @@ class Project(BaseModel):
         -------
         oplusclient.models.Geometry
         """
-        self._get_by_filter(self.client.geometry, name)
+        return self._get_by_filter(self.client.geometry, name)
 
     def list_geometries(self):
         """
