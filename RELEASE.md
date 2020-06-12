@@ -2,4 +2,5 @@
 
 * (M): major, (m): minor, (p): patch
 
-## next
+# 1.0.0.rc1
+* M: first version

@@ -12,15 +12,43 @@ DT_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 class Simulation(BaseModel):
     def get_obat(self):
+        """
+        Get obat.
+
+        Returns
+        -------
+        oplusclient.models.Obat
+        """
         return self._get_related("obat_id", self.client.obat)
 
     def get_geometry(self):
+        """
+        Get geometry.
+
+        Returns
+        -------
+        oplusclient.models.Geometry
+        """
         return self._get_related("geometry_id", self.client.geometry)
 
     def get_weather(self):
+        """
+        Get weather.
+
+        Returns
+        -------
+        oplusclient.models.Weather
+        """
         return self._get_related("weather_id", self.client.weather)
 
     def get_simulation_group(self):
+        """
+        Get simulation group.
+
+        Returns
+        -------
+        oplusclient.models.SimulationGroup
+        """
         return self.endpoint.parent
 
     def _get_result(self, detail_route):
