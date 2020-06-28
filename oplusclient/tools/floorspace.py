@@ -33,7 +33,7 @@ class Floorplan:
             name=name,
             image_visible=True,
             height=height,
-            color="#999933",  # TODO: chose randomly from a list of possible colors
+            color=color,
             geometry=dict(
                 id=str(uuid.uuid4()),
                 vertices=[],
@@ -50,7 +50,7 @@ class Floorplan:
     def add_space_to_story(
             self,
             story_name,
-            space_vertices,
+            vertices,
             name,
             zone_groups_tag_1_id=None,
             zone_groups_tag_2_id=None,
@@ -59,6 +59,8 @@ class Floorplan:
             color="#E67E22"
     ):
         """
+        Add a space to a story.
+
         Parameters
         ----------
         story_name: str
@@ -94,22 +96,66 @@ class Floorplan:
         ))
 
         # get the dest vertices and add the source ones
-        vertices = dict()
-        for v in story["geometry"]["vertices"]:
-            vertices[(v["x"], v["y"])] = v
+        self._add_face_to_story(face_id, vertices, story)
 
+    def add_shading_to_story(
+        self,
+        story_name,
+        vertices,
+        name,
+        color="#E8E3E5"
+    ):
+        """
+        Add a shading to a story.
+
+        Parameters
+        ----------
+        story_name: str
+            name of the story on which the space should be added
+        vertices: list
+            ordered list of (x, y) coordinates of the polygon to add
+        name: str
+            name of the shading
+        color: str
+        """
+        try:
+            story = [s for s in self.json_data["stories"] if s["name"] == story_name][0]
+        except IndexError:
+            raise ValueError(f"No story with name {story_name} found")
+
+        face_id = str(uuid.uuid4())
+        shading_id = str(uuid.uuid4())
+
+        story["shading"].append(dict(
+            id=shading_id,
+            handle=None,
+            name=name,
+            face_id=face_id,
+            color=color,
+            type="shading"
+        ))
+
+        # get the dest vertices and add the source ones
+        self._add_face_to_story(face_id, vertices, story)
+
+    def _add_face_to_story(self, face_id, face_vertices, story):
         face = dict(
             id=face_id,
             edge_ids=[],
             edge_order=[]
         )
+
+        vertices = dict()
+        for v in story["geometry"]["vertices"]:
+            vertices[(v["x"], v["y"])] = v
+
         story["geometry"]["faces"].append(face)
 
         # get the dest edges
         edges = dict()
         for edge in story["geometry"]["edges"]:
             edges[(edge["vertex_ids"][0], edge["vertex_ids"][1])] = edge
-        for v0, v1 in zip(space_vertices, space_vertices[1:] + space_vertices[0:1]):
+        for v0, v1 in zip(face_vertices, face_vertices[1:] + face_vertices[0:1]):
             for v in (v0, v1):
                 if v not in vertices:
                     v_id = str(uuid.uuid4())
@@ -165,10 +211,6 @@ class Floorplan:
         except IndexError:
             raise ValueError(f"No story with name {source_story_name} found")
         try:
-            dest_story = [s for s in self.json_data["stories"] if s["name"] == dest_story_name][0]
-        except IndexError:
-            raise ValueError(f"No story with name {source_story_name} found")
-        try:
             src_space = [s for s in src_story["spaces"] if s["name"] == space_name][0]
         except IndexError:
             raise ValueError(f"No space with name {space_name} found")
@@ -191,6 +233,48 @@ class Floorplan:
             src_space["pitched_roof_id"],
             src_space["daylighting_controls"],
             src_space["color"]
+        )
+
+    def copy_shading_to_story(self, shading_name, source_story_name, dest_story_name):
+        """
+        Copy a shading to another stories
+
+        Only clones the geometry, windows, etc. are not copied.
+
+        Parameters
+        ----------
+        shading_name: str
+            Name of the shading to copy
+        source_story_name: str
+            Story where the shading is located
+        dest_story_name: str
+            Story where the shading should be copied
+        """
+        if source_story_name == dest_story_name:
+            raise ValueError("source and destination stories must be different.")
+        try:
+            src_story = [s for s in self.json_data["stories"] if s["name"] == source_story_name][0]
+        except IndexError:
+            raise ValueError(f"No story with name {source_story_name} found")
+        try:
+            src_shading = [s for s in src_story["shading"] if s["name"] == shading_name][0]
+        except IndexError:
+            raise ValueError(f"No shading with name {shading_name} found")
+
+        src_face = [s for s in src_story["geometry"]["faces"] if s["id"] == src_shading["face_id"]][0]
+
+        # get the vertices
+        vertices = []
+        for e_id, order in zip(src_face["edge_ids"], src_face["edge_order"]):
+            edge = [e for e in src_story["geometry"]["edges"] if e["id"] == e_id][0]
+            v0 = [v for v in src_story["geometry"]["vertices"] if v["id"] == edge["vertex_ids"][0 if order else 1]][0]
+            vertices.append((v0["x"], v0["y"]))
+
+        self.add_shading_to_story(
+            dest_story_name,
+            vertices,
+            src_shading["name"],
+            src_shading["color"]
         )
 
     def save(self, buffer_or_path=None):
@@ -244,6 +328,7 @@ class Floorplan:
         -------
         None (if buffer_or_path is not None), else str containing the floorplan
         """
+        # todo: recode with the add_zone / add_shading functions coded above
         # todo: explain the characteristics of geo_data_frame (shadings columns ? multiple zones ?)
         # import dependencies
         import numpy as np
