@@ -47,6 +47,102 @@ class Floorplan:
             doors=[]
         ))
 
+    def add_space_to_story(
+            self,
+            story_name,
+            space_vertices,
+            name,
+            zone_groups_tag_1_id=None,
+            zone_groups_tag_2_id=None,
+            pitched_roof_id=None,
+            daylighting_controls=None,
+            color="#E67E22"
+    ):
+        """
+        Parameters
+        ----------
+        story_name: str
+            name of the story on which the space should be added
+        vertices: list
+            ordered list of (x, y) coordinates of the polygon to add
+        name: str
+        zone_groups_tag_1_id: str or None
+        zone_groups_tag_2_id: str or None
+        pitched_roof_id: str or None
+        daylighting_controls: list or None
+        color: str or None
+        """
+        try:
+            story = [s for s in self.json_data["stories"] if s["name"] == story_name][0]
+        except IndexError:
+            raise ValueError(f"No story with name {story_name} found")
+
+        face_id = str(uuid.uuid4())
+        space_id = str(uuid.uuid4())
+
+        story["spaces"].append(dict(
+            id=space_id,
+            handle=None,
+            name=name,
+            face_id=face_id,
+            zone_groups_tag_1_id=zone_groups_tag_1_id,
+            zone_groups_tag_2_id=zone_groups_tag_2_id,
+            pitched_roof_id=pitched_roof_id,
+            daylighting_controls=daylighting_controls if daylighting_controls is not None else [],
+            color=color,
+            type="space"
+        ))
+
+        # get the dest vertices and add the source ones
+        vertices = dict()
+        for v in story["geometry"]["vertices"]:
+            vertices[(v["x"], v["y"])] = v
+
+        face = dict(
+            id=face_id,
+            edge_ids=[],
+            edge_order=[]
+        )
+        story["geometry"]["faces"].append(face)
+
+        # get the dest edges
+        edges = dict()
+        for edge in story["geometry"]["edges"]:
+            edges[(edge["vertex_ids"][0], edge["vertex_ids"][1])] = edge
+        for v0, v1 in zip(space_vertices, space_vertices[1:] + space_vertices[0:1]):
+            for v in (v0, v1):
+                if v not in vertices:
+                    v_id = str(uuid.uuid4())
+                    v_d = dict(
+                        x=v[0],
+                        y=v[1],
+                        id=v_id,
+                        edge_ids=[]
+                    )
+                    story["geometry"]["vertices"].append(v_d)
+                    vertices[v] = v_d
+            tup = (vertices[v0]["id"], vertices[v1]["id"])
+            inv = (vertices[v1]["id"], vertices[v0]["id"])
+            if tup in edges:
+                edge_d = edges[tup]
+                face["edge_order"].append(1)
+            elif inv in edges:
+                edge_d = edges[inv]
+                face["edge_order"].append(0)
+            else:
+                edge_d = dict(
+                    id=str(uuid.uuid4()),
+                    vertex_ids=list(tup),
+                    face_ids=[]
+                )
+                story["geometry"]["edges"].append(edge_d)
+                edges[tup] = edge_d
+                face["edge_order"].append(1)
+            face["edge_ids"].append(edge_d["id"])
+            edge_d["face_ids"].append(face_id)
+            vertices[v0]["edge_ids"].append(edge_d["id"])
+            vertices[v1]["edge_ids"].append(edge_d["id"])
+
     def copy_space_to_story(self, space_name, source_story_name, dest_story_name):
         """
         Copy a space to another stories
@@ -77,75 +173,25 @@ class Floorplan:
         except IndexError:
             raise ValueError(f"No space with name {space_name} found")
 
-        space_id = str(uuid.uuid4())
-        face_id = str(uuid.uuid4())
-
-        dest_story["spaces"].append(dict(
-            id=space_id,
-            face_id=face_id,
-            daylighting_controls=[],
-            **{k: v for k, v in src_space.items() if k not in ("id", "face_id", "daylighting_controls")}
-        ))
-
         src_face = [s for s in src_story["geometry"]["faces"] if s["id"] == src_space["face_id"]][0]
 
-        # get the edges
-        src_edges = []
+        # get the vertices
+        vertices = []
         for e_id, order in zip(src_face["edge_ids"], src_face["edge_order"]):
             edge = [e for e in src_story["geometry"]["edges"] if e["id"] == e_id][0]
             v0 = [v for v in src_story["geometry"]["vertices"] if v["id"] == edge["vertex_ids"][0 if order else 1]][0]
-            v1 = [v for v in src_story["geometry"]["vertices"] if v["id"] == edge["vertex_ids"][1 if order else 0]][0]
-            src_edges.append(((v0["x"], v0["y"]), (v1["x"], v1["y"])))
+            vertices.append((v0["x"], v0["y"]))
 
-        # get the dest vertices and add the source ones
-        vertices = dict()
-        for v in dest_story["geometry"]["vertices"]:
-            vertices[(v["x"], v["y"])] = v
-
-        face = dict(
-            id=face_id,
-            edge_ids=[],
-            edge_order=[]
+        self.add_space_to_story(
+            dest_story_name,
+            vertices,
+            src_space["name"],
+            src_space["zone_groups_tag_1_id"],
+            src_space["zone_groups_tag_2_id"],
+            src_space["pitched_roof_id"],
+            src_space["daylighting_controls"],
+            src_space["color"]
         )
-        dest_story["geometry"]["faces"].append(face)
-
-        # get the dest edges
-        edges = dict()
-        for edge in dest_story["geometry"]["edges"]:
-            edges[(edge["vertex_ids"][0], edge["vertex_ids"][1])] = edge
-        for v0, v1 in src_edges:
-            for v in (v0, v1):
-                if v not in vertices:
-                    v_id = str(uuid.uuid4())
-                    v_d = dict(
-                        x=v[0],
-                        y=v[1],
-                        id=v_id,
-                        edge_ids=[]
-                    )
-                    dest_story["geometry"]["vertices"].append(v_d)
-                    vertices[v] = v_d
-            tup = (vertices[v0]["id"], vertices[v1]["id"])
-            inv = (vertices[v1]["id"], vertices[v0]["id"])
-            if tup in edges:
-                edge_d = edges[tup]
-                face["edge_order"].append(1)
-            elif inv in edges:
-                edge_d = edges[inv]
-                face["edge_order"].append(0)
-            else:
-                edge_d = dict(
-                    id=str(uuid.uuid4()),
-                    vertex_ids=list(tup),
-                    face_ids=[]
-                )
-                dest_story["geometry"]["edges"].append(edge_d)
-                edges[tup] = edge_d
-                face["edge_order"].append(1)
-            face["edge_ids"].append(edge_d["id"])
-            edge_d["face_ids"].append(face_id)
-            vertices[v0]["edge_ids"].append(edge_d["id"])
-            vertices[v1]["edge_ids"].append(edge_d["id"])
 
     def save(self, buffer_or_path=None):
         """
