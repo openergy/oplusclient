@@ -138,7 +138,8 @@ class Floorplan:
         # get the dest vertices and add the source ones
         self._add_face_to_story(face_id, vertices, story)
 
-    def _add_face_to_story(self, face_id, face_vertices, story):
+    @staticmethod
+    def _add_face_to_story(face_id, face_vertices, story):
         face = dict(
             id=face_id,
             edge_ids=[],
