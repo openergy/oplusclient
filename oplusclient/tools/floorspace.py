@@ -14,6 +14,63 @@ class Floorplan:
     def __init__(self, json_data):
         self.json_data = json_data
 
+    def add_window_definition(
+            self,
+            name,
+            window_definition_mode,
+            wwr=None,
+            window_spacing=None,
+            height=None,
+            width=None,
+            sill_height=None,
+            texture="circles-5",
+    ):
+        """
+        Parameters
+        ----------
+        name: str
+        window_definition_mode: str
+            windowToWallRatio, or ...
+        wwr: float or None
+            NOne if window_definition_mode not windowToWallRatio
+        window_spacing: float or None
+        height: float or None
+        width: float or None
+        sill_height: float or None
+        texture: string
+        """
+        wd_id = str(uuid.uuid4())
+        self.json_data["window_definitions"].append(dict(
+            id=wd_id,
+            name=name,
+            window_definition_mode=window_definition_mode,
+            wwr=wwr,
+            window_spacing=window_spacing,
+            height=height,
+            width=width,
+            sill_height=sill_height,
+            texture=texture
+        ))
+
+    def add_window_to_all_exterior_edges(self, window_definition_name, alpha=0.5):
+        window_i = 0
+        window_definition_id = [w["id"] for w in self.json_data["window_definitions"]
+                                if w["name"] == window_definition_name][0]
+        for story in self.json_data["stories"]:
+            space_faces_ids = set([space["face_id"] for space in story["spaces"]])
+            for edge in story["geometry"]["edges"]:
+                if (len(edge["face_ids"]) != 1) or (edge["face_ids"][0] not in space_faces_ids):
+                    continue
+                # TODO: add window to this edge
+                story["windows"].append(dict(
+                    window_definition_id=window_definition_id,
+                    edge_id=edge["id"],
+                    alpha=alpha,
+                    id=str(uuid.uuid4()),
+                    name=f"auto_window_{window_i}"
+                ))
+                window_i += 1
+
     def add_story(self, name, height, color="#999933"):
         """
         Create an empty story.
