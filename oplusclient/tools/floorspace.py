@@ -1,8 +1,16 @@
 import os
 import json
 import uuid
+import warnings
+
 
 resources_path = os.path.join(os.path.dirname(__file__), "resources")
+
+
+def geo_data_frame_to_floorplan(geo_data_frame, buffer_or_path=None):
+    warnings.warn(DeprecationWarning, "this function is deprecated, use Floorplan.geo_data_frame_to_floorplan")
+    plan = Floorplan.geo_data_frame_to_floorplan(geo_data_frame)
+    return plan.save(buffer_or_path)
 
 
 class Floorplan:
