@@ -249,7 +249,7 @@ class Floorplan:
 
     def copy_space_to_story(self, space_name, source_story_name, dest_story_name):
         """
-        Copy a space to another stories
+        Copy a space to another story
 
         Only clones the geometry, windows, etc. are not copied.
 
@@ -295,7 +295,7 @@ class Floorplan:
 
     def copy_shading_to_story(self, shading_name, source_story_name, dest_story_name):
         """
-        Copy a shading to another stories
+        Copy a shading to another story
 
         Only clones the geometry, windows, etc. are not copied.
 
@@ -373,7 +373,7 @@ class Floorplan:
         return cls(json_data)
 
     @classmethod
-    def geo_data_frame_to_floorplan(cls, geo_data_frame):
+    def geo_data_frame_to_floorplan(cls, geo_data_frame, story_name="story_0", story_height=3):
         """
         Parameters
         ----------
@@ -381,10 +381,19 @@ class Floorplan:
             GeoDataFrame containing data to transform into a floorplan.
             A 'shading' column may be provided to specify if given a polygon is a shading. If not provided, no polygon
             will be considered as a shading.
+        story_name: str, default story_0
+            name that will be given to the unique story
+        story_height: float, default 3
+            height of the unique story
 
         Returns
         -------
-        None (if buffer_or_path is not None), else str containing the floorplan
+        None (if buffer_or_path is not None), else floorplan
+
+        Notes
+        -----
+        The created floorplan will contain one story. This story will contain one space per non shading polygon. The
+        name of the spaces corresponds to the index of the geo_data_frame.
         """
         # todo: recode with the add_zone / add_shading functions coded above
         # todo: explain the characteristics of geo_data_frame (shadings columns ? multiple zones ?)
@@ -454,6 +463,8 @@ class Floorplan:
 
         # fill it with prepared data
         fs = floorplan["stories"][0]
+        fs["name"] = story_name
+        fs["height"] = story_height
         for i, p in enumerate(points):
             fs["geometry"]["vertices"].append(dict(
                 x=p[0],
