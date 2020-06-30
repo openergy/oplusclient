@@ -1,1 +1,122 @@
-{"application":{"currentSelections":{"story":null,"story_id":"31419b50-3df0-11ea-bb36-01a769ddcb0e","subselection_ids":{"31419b50-3df0-11ea-bb36-01a769ddcb0e":"3141c261-3df0-11ea-bb36-01a769ddcb0e"},"component_id":null,"component_definition_id":null,"component_instance_id":null,"space_property_id":null,"tool":"Rectangle","mode":"spaces","snapMode":"grid-strict","modeTab":"floorplan","subselectionType":"spaces"},"modes":["spaces","shading","zone_groups_tags_1","zone_groups_tags_2","pitched_roofs"],"tools":["Pan","Drag","Rectangle","Polygon","Eraser","Select","Map","Fill","Place Component","Image","Apply Property"],"scale":{"x":{"pixels":1441,"rwuRange":[-265.5405405405405,265.5405405405405]},"y":{"pixels":814,"rwuRange":[-150,150]}}},"project":{"config":{"units":"si","unitsEditable":true,"language":"EN-US"},"north_axis":0,"ground_story":"31419b50-3df0-11ea-bb36-01a769ddcb0e","ground":{"floor_offset":0,"azimuth_angle":0,"tilt_slope":0},"grid":{"visible":true,"spacing":1},"view":{"min_x":-265.5405405405405,"min_y":-150,"max_x":265.5405405405405,"max_y":150},"map":{"initialized":false,"enabled":false,"visible":true,"latitude":48.8345028,"longitude":2.3687038,"zoom":4.5,"rotation":0,"elevation":0},"previous_story":{"visible":true},"show_import_export":true},"stories":[{"id":"31419b50-3df0-11ea-bb36-01a769ddcb0e","handle":null,"name":"etage_1","image_visible":true,"height":3,"color":"#999933","geometry":{"id":"3141c260-3df0-11ea-bb36-01a769ddcb0e","vertices":[],"edges":[],"faces":[]},"images":[],"spaces":[],"shading":[],"windows":[],"doors":[]}],"zone_groups_tags_1":[],"zone_groups_tags_2":[],"window_definitions":[],"daylighting_control_definitions":[],"pitched_roofs":[],"door_definitions":[],"version":"1.5.1"}
+{
+    "application": {
+        "currentSelections": {
+            "story": null,
+            "story_id": "31419b50-3df0-11ea-bb36-01a769ddcb0e",
+            "subselection_ids": {
+                "31419b50-3df0-11ea-bb36-01a769ddcb0e": "3141c261-3df0-11ea-bb36-01a769ddcb0e"
+            },
+            "component_id": null,
+            "component_definition_id": null,
+            "component_instance_id": null,
+            "space_property_id": null,
+            "tool": "Rectangle",
+            "mode": "spaces",
+            "snapMode": "grid-strict",
+            "modeTab": "floorplan",
+            "subselectionType": "spaces"
+        },
+        "modes": [
+            "spaces",
+            "shading",
+            "zone_groups_tags_1",
+            "zone_groups_tags_2",
+            "pitched_roofs"
+        ],
+        "tools": [
+            "Pan",
+            "Drag",
+            "Rectangle",
+            "Polygon",
+            "Eraser",
+            "Select",
+            "Map",
+            "Fill",
+            "Place Component",
+            "Image",
+            "Apply Property"
+        ],
+        "scale": {
+            "x": {
+                "pixels": 1441,
+                "rwuRange": [
+                    -265.5405405405405,
+                    265.5405405405405
+                ]
+            },
+            "y": {
+                "pixels": 814,
+                "rwuRange": [
+                    -150,
+                    150
+                ]
+            }
+        }
+    },
+    "project": {
+        "config": {
+            "units": "si",
+            "unitsEditable": true,
+            "language": "EN-US"
+        },
+        "north_axis": 0,
+        "ground_story": "31419b50-3df0-11ea-bb36-01a769ddcb0e",
+        "ground": {
+            "floor_offset": 0,
+            "azimuth_angle": 0,
+            "tilt_slope": 0
+        },
+        "grid": {
+            "visible": true,
+            "spacing": 1
+        },
+        "view": {
+            "min_x": -265.5405405405405,
+            "min_y": -150,
+            "max_x": 265.5405405405405,
+            "max_y": 150
+        },
+        "map": {
+            "initialized": false,
+            "enabled": false,
+            "visible": true,
+            "latitude": 48.8345028,
+            "longitude": 2.3687038,
+            "zoom": 4.5,
+            "rotation": 0,
+            "elevation": 0
+        },
+        "previous_story": {
+            "visible": true
+        },
+        "show_import_export": true
+    },
+    "stories": [
+        {
+            "id": "31419b50-3df0-11ea-bb36-01a769ddcb0e",
+            "handle": null,
+            "name": "etage_1",
+            "image_visible": true,
+            "height": 3,
+            "color": "#999933",
+            "geometry": {
+                "id": "3141c260-3df0-11ea-bb36-01a769ddcb0e",
+                "vertices": [],
+                "edges": [],
+                "faces": []
+            },
+            "images": [],
+            "spaces": [],
+            "shading": [],
+            "windows": [],
+            "doors": []
+        }
+    ],
+    "zone_groups_tags_1": [],
+    "zone_groups_tags_2": [],
+    "window_definitions": [],
+    "daylighting_control_definitions": [],
+    "pitched_roofs": [],
+    "door_definitions": [],
+    "version": "1.5.1"
+}
