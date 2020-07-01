@@ -283,6 +283,52 @@ class Project(BaseModel):
         """
         return self._list_by_filter(self.client.multi_simulation_group)
 
+    def create_generic_simulation_group(
+            self,
+            name,
+            comment=None
+    ):
+        """
+        Create a multi_simulation_group in this project.
+
+        Parameters
+        ----------
+        name: str
+        comment: str
+
+        Returns
+        -------
+        oplusclient.models.MultiSimulationGroup
+        """
+        data = {k: v for k, v in (
+            ("comment", comment),
+        ) if v is not None}
+        return self.client.generic_simulation_group.create(name=name, project=self.id, **data)
+
+    def get_generic_simulation_group(self, name):
+        """
+        Get multi_simulation_group by name.
+
+        Parameters
+        ----------
+        name: str
+
+        Returns
+        -------
+        oplusclient.models.MultiSimulationGroup
+        """
+        return self._get_by_filter(self.client.generic_simulation_group, name)
+
+    def list_generic_simulation_groups(self):
+        """
+        List multi_simulation_groups in this project.
+
+        Returns
+        -------
+        list of oplusclient.models.MultiSimulationGroup
+        """
+        return self._list_by_filter(self.client.generic_simulation_group)
+
     def _list_by_filter(self, endpoint):
         return list(endpoint.iter(filter_by=dict(project=self.id)))
 
