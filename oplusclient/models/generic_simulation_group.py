@@ -5,13 +5,13 @@ from . import SimulationGroup, Weather, Geometry, Obat
 
 
 class GenericSimulationGroup(SimulationGroup):
-    def update_obat(self, obat):
-        if isinstance(obat, Obat):
-            obat = obat.id
-        self.detail_action("update_obat", "PATCH", data=dict(obat=obat))
-
-    def get_obat(self):
-        return self._get_related("config_obat", self.client.obat)
+    # def update_obat(self, obat):
+    #     if isinstance(obat, Obat):
+    #         obat = obat.id
+    #     self.detail_action("update_obat", "PATCH", data=dict(obat=obat))
+    # 
+    # def get_obat(self):
+    #     return self._get_related("config_obat", self.client.obat)
     
     def add_simulation(self, name, weather, geometry, obat, start, end, variant=None, substitute_modifications=None):
         """
@@ -32,8 +32,8 @@ class GenericSimulationGroup(SimulationGroup):
         -------
         Simulation
         """
-        # if isinstance(obat, Obat):
-        #     obat = obat.id
+        if isinstance(obat, Obat):
+            obat = obat.id
         if isinstance(weather, Weather):
             weather = weather.id
         if isinstance(geometry, Geometry):
@@ -46,7 +46,7 @@ class GenericSimulationGroup(SimulationGroup):
                     name=name,
                     weather_id=weather,
                     geometry_id=geometry,
-                    # obat_id=obat,
+                    obat_id=obat,
                     start=start.strftime("%Y-%m-%dT00:00:00"),
                     end=end.strftime("%Y-%m-%dT23:59:59"),
                     variant=variant,
