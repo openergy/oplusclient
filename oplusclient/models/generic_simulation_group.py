@@ -5,6 +5,14 @@ from . import SimulationGroup, Weather, Geometry, Obat
 
 
 class GenericSimulationGroup(SimulationGroup):
+    def update_obat(self, obat):
+        if isinstance(obat, Obat):
+            obat = obat.id
+        self.detail_action("update_obat", "PATCH", data=dict(obat=obat))
+
+    def get_obat(self):
+        return self._get_related("config_obat", self.client.obat)
+    
     def add_simulation(self, name, weather, geometry, obat, start, end, variant=None, substitute_modifications=None):
         """
         Add a simulation.
