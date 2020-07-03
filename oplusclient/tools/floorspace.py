@@ -6,19 +6,19 @@ import warnings
 
 
 FLOORSPACE_COLORS = [
-      '#aa4499',
-      '#88ccee',
-      '#332288',
-      '#117733',
-      '#999933',
-      '#ddcc77',
-      '#cc6677',
-      '#882255',
-      '#44aa99',
-      '#6699cc',
-      '#661100',
-      '#aa4466',
-    ]
+    "#aa4499",
+    "#88ccee",
+    "#332288",
+    "#117733",
+    "#999933",
+    "#ddcc77",
+    "#cc6677",
+    "#882255",
+    "#44aa99",
+    "#6699cc",
+    "#661100",
+    "#aa4466",
+]
 
 resources_path = os.path.join(os.path.dirname(__file__), "resources")
 
@@ -27,6 +27,10 @@ def geo_data_frame_to_floorplan(geo_data_frame, buffer_or_path=None):
     warnings.warn(DeprecationWarning, "this function is deprecated, use Floorplan.geo_data_frame_to_floorplan")
     plan = Floorplan.geo_data_frame_to_floorplan(geo_data_frame)
     return plan.save(buffer_or_path)
+
+
+class ObjectNotFoundError(Exception):
+    pass
 
 
 class Floorplan:
@@ -91,7 +95,6 @@ class Floorplan:
             for edge in story["geometry"]["edges"]:
                 if (len(edge["face_ids"]) != 1) or (edge["face_ids"][0] not in space_faces_ids):
                     continue
-                # TODO: add window to this edge
                 story["windows"].append(dict(
                     window_definition_id=window_definition_id,
                     edge_id=edge["id"],
@@ -225,8 +228,7 @@ class Floorplan:
         # get the dest vertices and add the source ones
         self._add_face_to_story(face_id, vertices, story)
 
-    @staticmethod
-    def _add_face_to_story(face_id, face_vertices, story):
+    def _add_face_to_story(self, face_id, face_vertices, story):
         face = dict(
             id=face_id,
             edge_ids=[],
@@ -277,6 +279,54 @@ class Floorplan:
             vertices[v0]["edge_ids"].append(edge_d["id"])
             vertices[v1]["edge_ids"].append(edge_d["id"])
 
+    def display_faces(self, face_ids):
+        # debug function used to display faces
+        import numpy as np
+        from matplotlib.patches import Polygon
+        from matplotlib.collections import PatchCollection
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots()
+        if isinstance(face_ids, str):
+            face_ids = [face_ids]
+        vertices = [np.array(self.get_face_vertices(f)) for f in face_ids]
+        patches = [Polygon(v) for v in vertices]
+        colors = np.arange(len(face_ids))
+        p = PatchCollection(patches)
+        p.set_array(np.array(colors))
+        ax.set_xlim(xmin=min([np.min(v[:, 0]) for v in vertices]), xmax=max([np.max(v[:, 0]) for v in vertices]))
+        ax.set_ylim(ymin=min([np.min(v[:, 1]) for v in vertices]), ymax=max([np.max(v[:, 1]) for v in vertices]))
+        ax.add_collection(p)
+        fig.colorbar(p, ax=ax)
+        plt.show()
+
+    @staticmethod
+    def _get_by_id(l, id):
+        try:
+            return [o for o in l if o["id"] == id][0]
+        except IndexError:
+            raise ObjectNotFoundError(f"Could not find an object with id {id}.")
+
+    def get_face_vertices(self, face_id):
+        vertices = []
+        for s in self.json_data["stories"]:
+            try:
+                face = self._get_by_id(s["geometry"]["faces"], face_id)
+            except ObjectNotFoundError:
+                continue
+            else:
+                geometry = s["geometry"]
+                break
+        else:
+            raise ValueError(f"Could not find a face with id {face_id}.")
+        for e_id, e_order in zip(face["edge_ids"], face["edge_order"]):
+            edge = self._get_by_id(geometry["edges"], e_id)
+            if e_order:
+                v = self._get_by_id(geometry["vertices"], edge["vertex_ids"][0])
+            else:
+                v = self._get_by_id(geometry["vertices"], edge["vertex_ids"][1])
+            vertices.append((v["x"], v["y"]))
+        return vertices
+
     def copy_space_to_story(self, space_name, source_story_name, dest_story_name):
         """
         Copy a space to another story
@@ -303,7 +353,7 @@ class Floorplan:
         except IndexError:
             raise ValueError(f"No space with name {space_name} found")
 
-        src_face = [s for s in src_story["geometry"]["faces"] if s["id"] == src_space["face_id"]][0]
+        src_face = self._get_by_id(src_story["geometry"]["faces"], src_space["face_id"])
 
         # get the vertices
         vertices = []
@@ -349,13 +399,13 @@ class Floorplan:
         except IndexError:
             raise ValueError(f"No shading with name {shading_name} found")
 
-        src_face = [s for s in src_story["geometry"]["faces"] if s["id"] == src_shading["face_id"]][0]
+        src_face = self._get_by_id(src_story["geometry"]["faces"], src_shading["face_id"])
 
         # get the vertices
         vertices = []
         for e_id, order in zip(src_face["edge_ids"], src_face["edge_order"]):
-            edge = [e for e in src_story["geometry"]["edges"] if e["id"] == e_id][0]
-            v0 = [v for v in src_story["geometry"]["vertices"] if v["id"] == edge["vertex_ids"][0 if order else 1]][0]
+            edge = self._get_by_id(src_story["geometry"]["edges"], e_id)
+            v0 = self._get_by_id(src_story["geometry"]["vertices"], edge["vertex_ids"][0 if order else 1])
             vertices.append((v0["x"], v0["y"]))
 
         self.add_shading_to_story(
@@ -425,38 +475,38 @@ class Floorplan:
         The created floorplan will contain one story. This story will contain one space per non shading polygon. The
         name of the spaces corresponds to the index of the geo_data_frame.
         """
-        # todo: recode with the add_zone / add_shading functions coded above
         # todo: explain the characteristics of geo_data_frame (shadings columns ? multiple zones ?)
         # import dependencies
-        import numpy as np
         import shapely
 
         # projection
         # todo: manage multiple projections
-        gdf = geo_data_frame.to_crs(epsg=2154)  # todo: what is epsg ?
+        gdf = geo_data_frame.to_crs(epsg=2154)
+        # remove empty and duplicate geometries
+        gdf = gdf[~gdf.is_empty]
+        gdf = gdf.sort_values(["shading"])
+        gdf = gdf[~gdf.geometry.duplicated(keep="first")]
 
         # find centroid and translate
-        centroid = gdf.geometry[~gdf.shading].iloc[0].centroid
+        centroid = gdf.geometry.iloc[0].centroid
         gdf.geometry = gdf.geometry.translate(xoff=-centroid.x, yoff=-centroid.y)
 
         # transform to polygons
         polygons = list()
         for _, row in gdf.iterrows():
-            if len(row.geometry) > 1:
+            if isinstance(row.geometry, shapely.geometry.MultiPolygon):
+                if len(row.geometry) > 1:
+                    raise NotImplemented
+                polygon = shapely.geometry.Polygon(row.geometry[0].exterior).simplify(0, preserve_topology=False)
+            elif isinstance(row.geometry, shapely.geometry.Polygon):
+                polygon = shapely.geometry.Polygon(row.geometry.exterior).simplify(0, preserve_topology=False)
+            else:
                 raise NotImplemented
             polygons.append(dict(
-                polygon=shapely.affinity.rotate(
-                    shapely.geometry.Polygon(row.geometry[0].exterior),
-                    angle=-4,
-                    origin=[0, 0]),
+                polygon=polygon,
                 is_shading=row.shading,
                 name=str(row.name)
             ))
-
-        # set decimals
-        decimals = 1  # todo: is this an option ?
-        for p in polygons:
-            p["polygon"] = shapely.wkt.loads(shapely.wkt.dumps(p["polygon"], rounding_precision=decimals))
 
         # load empty floorplan
         with open(os.path.join(resources_path, "empty_floorplan.flo")) as f:
