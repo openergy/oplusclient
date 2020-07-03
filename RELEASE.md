@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.2.0
+* m: added support for generic simulation groups (incl. substitute modifications)
+
 ## 1.1.1
 * p: Floorplan class improvements
 * p: support new multi-simulation format (multi-obat)

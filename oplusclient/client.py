@@ -28,6 +28,8 @@ class Client:
                                                    models.MultiSimulationGroup)
         self.mono_simulation_group = BaseEndpoint(self, "osssimulations/mono_simulation_groups",
                                                   models.MonoSimulationGroup)
+        self.generic_simulation_group = BaseEndpoint(self, "osssimulations/generic_simulation_groups",
+                                                     models.GenericSimulationGroup)
 
         # oteams
         self.organization = BaseEndpoint(self, "oteams/organizations", model_cls=models.Organization)

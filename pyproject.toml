@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oplusclient"
-version = "1.1.1"
+version = "1.2.0"
 description = "A python client for Oplus"
 authors = ["Openergy dev team"]
 license = "MPL-2.0"

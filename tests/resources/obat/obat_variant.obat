@@ -1,0 +1,1115 @@
+{
+  "__version__": "8.3.0",
+  "activity_zone_group": [
+    {
+      "sort_index": 0,
+      "id": "logement",
+      "ref": "logement",
+      "internal_mass_coefficient": null,
+      "light": "ecl_logement",
+      "people": "occ_logement",
+      "electric_equipment": "equ_logement",
+      "electric_equipment_bis": null,
+      "natural_ventilation": "vent_naturelle",
+      "natural_ventilation_bis": null,
+      "infiltration": "inf_bat",
+      "mechanical_ventilation_system": "vmc",
+      "heating_system": "chauffage",
+      "cooling_system": null,
+      "outdoor_air": "vmc_logement",
+      "heating_setpoint": "t_chaud_logement",
+      "cooling_setpoint": null,
+      "dhw_system": "boucle_ecs",
+      "dhw": "ecs_logement",
+      "filter_geometries": null,
+      "filter_zones": "logement"
+    },
+    {
+      "sort_index": 1,
+      "id": "circulations",
+      "ref": "circulations",
+      "internal_mass_coefficient": null,
+      "light": "ecl_circulation",
+      "people": null,
+      "electric_equipment": null,
+      "electric_equipment_bis": null,
+      "natural_ventilation": "vent_naturelle",
+      "natural_ventilation_bis": null,
+      "infiltration": "inf_bat",
+      "mechanical_ventilation_system": null,
+      "heating_system": null,
+      "cooling_system": null,
+      "outdoor_air": null,
+      "heating_setpoint": null,
+      "cooling_setpoint": null,
+      "dhw_system": null,
+      "dhw": null,
+      "filter_geometries": null,
+      "filter_zones": "circulation"
+    }
+  ],
+  "bridge": [],
+  "calendar": [
+    {
+      "id": "activite",
+      "ref": "activite"
+    }
+  ],
+  "construction": [
+    {
+      "id": "mur_enterre",
+      "ref": "mur_enterre",
+      "surface_category": "wall_ground",
+      "conductivities_ratio": 1.0,
+      "wireframe_position": 1
+    },
+    {
+      "id": "mur_exterieur",
+      "ref": "mur_exterieur",
+      "surface_category": "wall_outdoor",
+      "conductivities_ratio": 1.2,
+      "wireframe_position": 3
+    },
+    {
+      "id": "mur_interieur",
+      "ref": "mur_interieur",
+      "surface_category": "wall_interior",
+      "conductivities_ratio": 1.0,
+      "wireframe_position": 0
+    },
+    {
+      "id": "plancher_bas_exterieur",
+      "ref": "plancher_bas_exterieur",
+      "surface_category": "floor_outdoor",
+      "conductivities_ratio": 1.2,
+      "wireframe_position": 2
+    },
+    {
+      "id": "plancher_bas_terre_plein",
+      "ref": "plancher_bas_terre_plein",
+      "surface_category": "floor_ground",
+      "conductivities_ratio": 1.0,
+      "wireframe_position": 2
+    },
+    {
+      "id": "plancher_intermediaire",
+      "ref": "plancher_intermediaire",
+      "surface_category": "floor_interior",
+      "conductivities_ratio": 1.0,
+      "wireframe_position": 1
+    },
+    {
+      "id": "toiture",
+      "ref": "toiture",
+      "surface_category": "roof_outdoor",
+      "conductivities_ratio": 1.2,
+      "wireframe_position": 2
+    }
+  ],
+  "day_group": [
+    {
+      "sort_group": "activite",
+      "sort_index": 0,
+      "id": "activite~semaine",
+      "calendar": "activite",
+      "weak_ref": "semaine"
+    },
+    {
+      "sort_group": "activite",
+      "sort_index": 1,
+      "id": "activite~weekend",
+      "calendar": "activite",
+      "weak_ref": "weekend"
+    }
+  ],
+  "day_profile": [
+    {
+      "id": "activite_circulation~semaine",
+      "year_profile": "activite_circulation",
+      "day_group": "activite~semaine",
+      "series": {
+        "data": [
+          0.0,
+          1.0,
+          0.5,
+          1.0,
+          0.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z",
+          "2012-01-01T07:00:00.000Z",
+          "2012-01-01T09:00:00.000Z",
+          "2012-01-01T18:00:00.000Z",
+          "2012-01-01T23:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "activite_circulation~weekend",
+      "year_profile": "activite_circulation",
+      "day_group": "activite~weekend",
+      "series": {
+        "data": [
+          0.0,
+          1.0,
+          0.5,
+          1.0,
+          0.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z",
+          "2012-01-01T07:00:00.000Z",
+          "2012-01-01T09:00:00.000Z",
+          "2012-01-01T18:00:00.000Z",
+          "2012-01-01T23:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "activite_logement~semaine",
+      "year_profile": "activite_logement",
+      "day_group": "activite~semaine",
+      "series": {
+        "data": [
+          0.0,
+          1.0,
+          0.0,
+          0.5,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z",
+          "2012-01-01T07:00:00.000Z",
+          "2012-01-01T09:00:00.000Z",
+          "2012-01-01T12:00:00.000Z",
+          "2012-01-01T14:00:00.000Z",
+          "2012-01-01T18:00:00.000Z",
+          "2012-01-01T23:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "activite_logement~weekend",
+      "year_profile": "activite_logement",
+      "day_group": "activite~weekend",
+      "series": {
+        "data": [
+          0.0,
+          1.0,
+          0.5,
+          1.0,
+          0.5,
+          1.0,
+          0.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z",
+          "2012-01-01T07:00:00.000Z",
+          "2012-01-01T09:00:00.000Z",
+          "2012-01-01T12:00:00.000Z",
+          "2012-01-01T14:00:00.000Z",
+          "2012-01-01T18:00:00.000Z",
+          "2012-01-01T23:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "always_on~semaine",
+      "year_profile": "always_on",
+      "day_group": "activite~semaine",
+      "series": {
+        "data": [
+          1.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "always_on~weekend",
+      "year_profile": "always_on",
+      "day_group": "activite~weekend",
+      "series": {
+        "data": [
+          1.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "occ_logement~semaine",
+      "year_profile": "occ_logement",
+      "day_group": "activite~semaine",
+      "series": {
+        "data": [
+          1.0,
+          0.15,
+          0.5,
+          0.15,
+          1.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z",
+          "2012-01-01T09:00:00.000Z",
+          "2012-01-01T12:00:00.000Z",
+          "2012-01-01T14:00:00.000Z",
+          "2012-01-01T18:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "occ_logement~weekend",
+      "year_profile": "occ_logement",
+      "day_group": "activite~weekend",
+      "series": {
+        "data": [
+          1.0,
+          0.5,
+          1.0,
+          0.5,
+          1.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z",
+          "2012-01-01T09:00:00.000Z",
+          "2012-01-01T12:00:00.000Z",
+          "2012-01-01T14:00:00.000Z",
+          "2012-01-01T18:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "t_chaud_logement~semaine",
+      "year_profile": "t_chaud_logement",
+      "day_group": "activite~semaine",
+      "series": {
+        "data": [
+          20.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    },
+    {
+      "id": "t_chaud_logement~weekend",
+      "year_profile": "t_chaud_logement",
+      "day_group": "activite~weekend",
+      "series": {
+        "data": [
+          20.0
+        ],
+        "index": [
+          "2012-01-01T00:00:00.000Z"
+        ],
+        "name": "series"
+      }
+    }
+  ],
+  "general": [
+    {
+      "id": "main",
+      "obat_eplus_conf_solar_distribution": "full_exterior",
+      "energy_coefficients_electricity": 2.58,
+      "energy_coefficients_gas": 1.0,
+      "energy_coefficients_heating_district": 1.0,
+      "energy_coefficients_cooling_district": 1.0
+    }
+  ],
+  "layer": [
+    {
+      "sort_group": "mur_enterre",
+      "sort_index": 0,
+      "id": "mur_enterre~0",
+      "construction": "mur_enterre",
+      "material": "beton",
+      "thickness": 0.2
+    },
+    {
+      "sort_group": "mur_exterieur",
+      "sort_index": 0,
+      "id": "mur_exterieur~0",
+      "construction": "mur_exterieur",
+      "material": "platre",
+      "thickness": 0.013
+    },
+    {
+      "sort_group": "mur_exterieur",
+      "sort_index": 1,
+      "id": "mur_exterieur~1",
+      "construction": "mur_exterieur",
+      "material": "isolant_035",
+      "thickness": 0.05
+    },
+    {
+      "sort_group": "mur_exterieur",
+      "sort_index": 2,
+      "id": "mur_exterieur~2",
+      "construction": "mur_exterieur",
+      "material": "beton",
+      "thickness": 0.2
+    },
+    {
+      "sort_group": "mur_interieur",
+      "sort_index": 0,
+      "id": "mur_interieur~0",
+      "construction": "mur_interieur",
+      "material": "platre",
+      "thickness": 0.013
+    },
+    {
+      "sort_group": "mur_interieur",
+      "sort_index": 1,
+      "id": "mur_interieur~1",
+      "construction": "mur_interieur",
+      "material": "isolant_050",
+      "thickness": 0.05
+    },
+    {
+      "sort_group": "mur_interieur",
+      "sort_index": 2,
+      "id": "mur_interieur~2",
+      "construction": "mur_interieur",
+      "material": "platre",
+      "thickness": 0.013
+    },
+    {
+      "sort_group": "plancher_bas_exterieur",
+      "sort_index": 0,
+      "id": "plancher_bas_exterieur~0",
+      "construction": "plancher_bas_exterieur",
+      "material": "isolant_035",
+      "thickness": 0.05
+    },
+    {
+      "sort_group": "plancher_bas_exterieur",
+      "sort_index": 1,
+      "id": "plancher_bas_exterieur~1",
+      "construction": "plancher_bas_exterieur",
+      "material": "beton",
+      "thickness": 0.2
+    },
+    {
+      "sort_group": "plancher_bas_terre_plein",
+      "sort_index": 0,
+      "id": "plancher_bas_terre_plein~0",
+      "construction": "plancher_bas_terre_plein",
+      "material": "isolant_035",
+      "thickness": 0.05
+    },
+    {
+      "sort_group": "plancher_bas_terre_plein",
+      "sort_index": 1,
+      "id": "plancher_bas_terre_plein~1",
+      "construction": "plancher_bas_terre_plein",
+      "material": "beton",
+      "thickness": 0.2
+    },
+    {
+      "sort_group": "plancher_intermediaire",
+      "sort_index": 0,
+      "id": "plancher_intermediaire~0",
+      "construction": "plancher_intermediaire",
+      "material": "beton",
+      "thickness": 0.2
+    },
+    {
+      "sort_group": "toiture",
+      "sort_index": 0,
+      "id": "toiture~0",
+      "construction": "toiture",
+      "material": "beton",
+      "thickness": 0.2
+    },
+    {
+      "sort_group": "toiture",
+      "sort_index": 1,
+      "id": "toiture~1",
+      "construction": "toiture",
+      "material": "isolant_035",
+      "thickness": 0.05
+    }
+  ],
+  "material": [
+    {
+      "id": "beton",
+      "ref": "beton",
+      "nominal_conductivity": 2.0,
+      "density": 2200.0,
+      "specific_heat": 1000.0
+    },
+    {
+      "id": "isolant_035",
+      "ref": "isolant_035",
+      "nominal_conductivity": 0.035,
+      "density": 50.0,
+      "specific_heat": 1000.0
+    },
+    {
+      "id": "isolant_050",
+      "ref": "isolant_050",
+      "nominal_conductivity": 0.05,
+      "density": 50.0,
+      "specific_heat": 1000.0
+    },
+    {
+      "id": "platre",
+      "ref": "platre",
+      "nominal_conductivity": 0.325,
+      "density": 850.0,
+      "specific_heat": 1000.0
+    }
+  ],
+  "modification": [
+    {
+      "sort_group": "beton_conductivite",
+      "sort_index": 0,
+      "id": "beton_conductivite~beton_conductivite",
+      "variant": "beton_conductivite",
+      "weak_ref": "beton_conductivite",
+      "table_ref": "material",
+      "filter_records": "beton",
+      "method": "nominal_conductivity__multiply",
+      "value": {
+        "value": 1.0
+      }
+    }
+  ],
+  "opening": [
+    {
+      "id": "double_vitrage_clair",
+      "ref": "double_vitrage_clair",
+      "surface_category": "wall_outdoor",
+      "type": "window",
+      "nominal_conductance": 2.5,
+      "conductance_ratio": 1.2,
+      "solar_heat_gain": 0.5,
+      "visible_transmittance": 0.65,
+      "blind_type": "vertical_shades",
+      "blind_position": "interior",
+      "blind_reflectance": 0.6,
+      "blind_transmittance": 0.2,
+      "blind_angle_method": null,
+      "blind_angle_value": null,
+      "blind_control_method": "on_if_high_solar_on_window",
+      "blind_control_value": 500.0,
+      "blind_control_availability": null,
+      "shading_overhang_ratio": null,
+      "shading_fin_ratio": null
+    }
+  ],
+  "output_zone_group": [
+    {
+      "sort_index": 0,
+      "id": "r0",
+      "ref": "r0",
+      "filter_geometries": null,
+      "filter_zones": "STORY:r0 OR STORY:rdc"
+    },
+    {
+      "sort_index": 1,
+      "id": "r1",
+      "ref": "r1",
+      "filter_geometries": null,
+      "filter_zones": "STORY:r1"
+    },
+    {
+      "sort_index": 2,
+      "id": "r2",
+      "ref": "r2",
+      "filter_geometries": null,
+      "filter_zones": "STORY:r2"
+    },
+    {
+      "sort_index": 3,
+      "id": "r3",
+      "ref": "r3",
+      "filter_geometries": null,
+      "filter_zones": "STORY:r3"
+    }
+  ],
+  "period": [
+    {
+      "id": "activite~semaine~semaine",
+      "day_group": "activite~semaine",
+      "weak_ref": "semaine",
+      "start_number": 1,
+      "start_day_type": null,
+      "start_month": 1,
+      "end_number": 31,
+      "end_day_type": null,
+      "end_month": 12,
+      "duration": null,
+      "affected_day_types": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday"
+      ]
+    },
+    {
+      "id": "activite~weekend~weekend",
+      "day_group": "activite~weekend",
+      "weak_ref": "weekend",
+      "start_number": 1,
+      "start_day_type": null,
+      "start_month": 1,
+      "end_number": 31,
+      "end_day_type": null,
+      "end_month": 12,
+      "duration": null,
+      "affected_day_types": [
+        "saturday",
+        "sunday"
+      ]
+    }
+  ],
+  "schedule": [
+    {
+      "id": "ecl_circulation",
+      "ref": "ecl_circulation",
+      "type": "light",
+      "method": "scheduled",
+      "unit": "w_per_m2",
+      "year_profile": "activite_circulation",
+      "nominal_value": 6.0,
+      "reduction_ratio": 0.5,
+      "baseload": 0.5,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": 0.25,
+      "lost_ratio": null,
+      "heat_gain_per_person": null,
+      "visible_ratio": 0.25,
+      "daylighting_control": false,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    },
+    {
+      "id": "ecl_logement",
+      "ref": "ecl_logement",
+      "type": "light",
+      "method": "scheduled",
+      "unit": "w_per_m2",
+      "year_profile": "activite_circulation",
+      "nominal_value": 6.0,
+      "reduction_ratio": 0.8,
+      "baseload": 0.0,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": 0.25,
+      "lost_ratio": null,
+      "heat_gain_per_person": null,
+      "visible_ratio": 0.25,
+      "daylighting_control": true,
+      "daylighting_control_setpoint": 200.0,
+      "daylighting_control_minimum_light_ratio": 0.0,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    },
+    {
+      "id": "ecs_logement",
+      "ref": "ecs_logement",
+      "type": "dhw",
+      "method": "scheduled",
+      "unit": "m3_per_day_per_person",
+      "year_profile": "always_on",
+      "nominal_value": 0.05,
+      "reduction_ratio": 0.8,
+      "baseload": null,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": null,
+      "lost_ratio": null,
+      "heat_gain_per_person": null,
+      "visible_ratio": null,
+      "daylighting_control": null,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": 12.0,
+      "outlet_temperature": 40.0
+    },
+    {
+      "id": "equ_logement",
+      "ref": "equ_logement",
+      "type": "electric_equipment",
+      "method": "scheduled",
+      "unit": "w_per_m2",
+      "year_profile": "activite_logement",
+      "nominal_value": 5.0,
+      "reduction_ratio": 1.0,
+      "baseload": 1.0,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": 0.15,
+      "lost_ratio": 0.0,
+      "heat_gain_per_person": null,
+      "visible_ratio": null,
+      "daylighting_control": null,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    },
+    {
+      "id": "inf_bat",
+      "ref": "inf_bat",
+      "type": "infiltration",
+      "method": "scheduled",
+      "unit": "volume_per_h",
+      "year_profile": "always_on",
+      "nominal_value": 0.5,
+      "reduction_ratio": 1.0,
+      "baseload": null,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": null,
+      "lost_ratio": null,
+      "heat_gain_per_person": null,
+      "visible_ratio": null,
+      "daylighting_control": null,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    },
+    {
+      "id": "occ_logement",
+      "ref": "occ_logement",
+      "type": "people",
+      "method": "scheduled",
+      "unit": "person_per_m2",
+      "year_profile": "occ_logement",
+      "nominal_value": 0.035,
+      "reduction_ratio": 0.8,
+      "baseload": null,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": 0.3,
+      "lost_ratio": null,
+      "heat_gain_per_person": 110.0,
+      "visible_ratio": null,
+      "daylighting_control": null,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    },
+    {
+      "id": "t_chaud_logement",
+      "ref": "t_chaud_logement",
+      "type": "heating_setpoint",
+      "method": "scheduled",
+      "unit": "celsius",
+      "year_profile": "t_chaud_logement",
+      "nominal_value": 1.0,
+      "reduction_ratio": 1.0,
+      "baseload": null,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": null,
+      "lost_ratio": null,
+      "heat_gain_per_person": null,
+      "visible_ratio": null,
+      "daylighting_control": null,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    },
+    {
+      "id": "vent_naturelle",
+      "ref": "vent_naturelle",
+      "type": "natural_ventilation",
+      "method": "scheduled",
+      "unit": "volume_per_h",
+      "year_profile": "activite_logement",
+      "nominal_value": 0.2,
+      "reduction_ratio": 1.0,
+      "baseload": null,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": null,
+      "lost_ratio": null,
+      "heat_gain_per_person": null,
+      "visible_ratio": null,
+      "daylighting_control": null,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    },
+    {
+      "id": "vmc_logement",
+      "ref": "vmc_logement",
+      "type": "outdoor_air",
+      "method": "scheduled",
+      "unit": "m3_per_h_per_m2",
+      "year_profile": "occ_logement",
+      "nominal_value": 1.25,
+      "reduction_ratio": 1.0,
+      "baseload": 0.25,
+      "data_ref": null,
+      "latent_ratio": null,
+      "radiant_ratio": null,
+      "lost_ratio": null,
+      "heat_gain_per_person": null,
+      "visible_ratio": null,
+      "daylighting_control": null,
+      "daylighting_control_setpoint": null,
+      "daylighting_control_minimum_light_ratio": null,
+      "variable_flow_constant_coefficient": null,
+      "variable_flow_temperature_coefficient": null,
+      "variable_flow_velocity_coefficient": null,
+      "variable_flow_velocity_squared_coefficient": null,
+      "delta_temperature": null,
+      "min_indoor_temperature": null,
+      "min_outdoor_temperature": null,
+      "max_indoor_temperature": null,
+      "max_outdoor_temperature": null,
+      "discharge_coefficient_for_opening": null,
+      "opening_area_ratio": null,
+      "inlet_temperature": null,
+      "outlet_temperature": null
+    }
+  ],
+  "surface_group": [
+    {
+      "sort_group": "floor_ground",
+      "sort_index": 0,
+      "id": "plancher_bas_terre_plein",
+      "ref": "plancher_bas_terre_plein",
+      "surface_category": "floor_ground",
+      "construction": "plancher_bas_terre_plein",
+      "opening": null,
+      "filter_geometries": null,
+      "filter_surfaces": null,
+      "filter_inner_zones": null,
+      "filter_outer_zones": null,
+      "filter_subsurfaces": null,
+      "orientation_direction": null,
+      "orientation_tolerance": null
+    },
+    {
+      "sort_group": "floor_interior",
+      "sort_index": 0,
+      "id": "plancher_intermediaire",
+      "ref": "plancher_intermediaire",
+      "surface_category": "floor_interior",
+      "construction": "plancher_intermediaire",
+      "opening": null,
+      "filter_geometries": null,
+      "filter_surfaces": null,
+      "filter_inner_zones": null,
+      "filter_outer_zones": null,
+      "filter_subsurfaces": null,
+      "orientation_direction": null,
+      "orientation_tolerance": null
+    },
+    {
+      "sort_group": "floor_outdoor",
+      "sort_index": 0,
+      "id": "plancher_bas_exterieur",
+      "ref": "plancher_bas_exterieur",
+      "surface_category": "floor_outdoor",
+      "construction": "plancher_bas_exterieur",
+      "opening": null,
+      "filter_geometries": null,
+      "filter_surfaces": null,
+      "filter_inner_zones": null,
+      "filter_outer_zones": null,
+      "filter_subsurfaces": null,
+      "orientation_direction": null,
+      "orientation_tolerance": null
+    },
+    {
+      "sort_group": "roof_outdoor",
+      "sort_index": 0,
+      "id": "toiture",
+      "ref": "toiture",
+      "surface_category": "roof_outdoor",
+      "construction": "toiture",
+      "opening": null,
+      "filter_geometries": null,
+      "filter_surfaces": null,
+      "filter_inner_zones": null,
+      "filter_outer_zones": null,
+      "filter_subsurfaces": null,
+      "orientation_direction": null,
+      "orientation_tolerance": null
+    },
+    {
+      "sort_group": "wall_ground",
+      "sort_index": 0,
+      "id": "mur_enterre",
+      "ref": "mur_enterre",
+      "surface_category": "wall_ground",
+      "construction": "mur_enterre",
+      "opening": null,
+      "filter_geometries": null,
+      "filter_surfaces": null,
+      "filter_inner_zones": null,
+      "filter_outer_zones": null,
+      "filter_subsurfaces": null,
+      "orientation_direction": null,
+      "orientation_tolerance": null
+    },
+    {
+      "sort_group": "wall_interior",
+      "sort_index": 0,
+      "id": "mur_interieur",
+      "ref": "mur_interieur",
+      "surface_category": "wall_interior",
+      "construction": "mur_interieur",
+      "opening": null,
+      "filter_geometries": null,
+      "filter_surfaces": null,
+      "filter_inner_zones": null,
+      "filter_outer_zones": null,
+      "filter_subsurfaces": null,
+      "orientation_direction": null,
+      "orientation_tolerance": null
+    },
+    {
+      "sort_group": "wall_outdoor",
+      "sort_index": 0,
+      "id": "mur_exterieur",
+      "ref": "mur_exterieur",
+      "surface_category": "wall_outdoor",
+      "construction": "mur_exterieur",
+      "opening": "double_vitrage_clair",
+      "filter_geometries": null,
+      "filter_surfaces": null,
+      "filter_inner_zones": null,
+      "filter_outer_zones": null,
+      "filter_subsurfaces": null,
+      "orientation_direction": null,
+      "orientation_tolerance": null
+    }
+  ],
+  "system": [
+    {
+      "id": "boucle_ecs",
+      "ref": "boucle_ecs",
+      "type": "dhw_loop",
+      "method": "ideal_water_heater",
+      "fan_sfp": null,
+      "loop_recovery": null,
+      "heating_energy": "heating_district",
+      "heating_efficiency": 0.5,
+      "heating_aux_ratio": 0.1,
+      "heating_capacity": null,
+      "heating_availability": null,
+      "cooling_energy": null,
+      "cooling_efficiency": null,
+      "cooling_aux_ratio": null,
+      "cooling_capacity": null,
+      "cooling_availability": null,
+      "supply_heating_trigger": null,
+      "supply_cooling_trigger": null
+    },
+    {
+      "id": "chauffage",
+      "ref": "chauffage",
+      "type": "heating_loop",
+      "method": "convective_emitter",
+      "fan_sfp": null,
+      "loop_recovery": null,
+      "heating_energy": "heating_district",
+      "heating_efficiency": 0.8,
+      "heating_aux_ratio": 0.1,
+      "heating_capacity": null,
+      "heating_availability": null,
+      "cooling_energy": null,
+      "cooling_efficiency": null,
+      "cooling_aux_ratio": null,
+      "cooling_capacity": null,
+      "cooling_availability": null,
+      "supply_heating_trigger": null,
+      "supply_cooling_trigger": null
+    },
+    {
+      "id": "vmc",
+      "ref": "vmc",
+      "type": "air_loop",
+      "method": "extract_only",
+      "fan_sfp": 0.5,
+      "loop_recovery": null,
+      "heating_energy": null,
+      "heating_efficiency": null,
+      "heating_aux_ratio": null,
+      "heating_capacity": null,
+      "heating_availability": null,
+      "cooling_energy": null,
+      "cooling_efficiency": null,
+      "cooling_aux_ratio": null,
+      "cooling_capacity": null,
+      "cooling_availability": null,
+      "supply_heating_trigger": null,
+      "supply_cooling_trigger": null
+    }
+  ],
+  "uses": [
+    {
+      "id": "main",
+      "consumption_cooling_emitter_thermal": "froid",
+      "consumption_heating_emitter_thermal": "chauffage",
+      "consumption_heating_emitter_auxiliary_fan": "aux_distribution",
+      "consumption_cooling_emitter_auxiliary_fan": "aux_distribution",
+      "consumption_heating_emitter_auxiliary_other": "aux_distribution",
+      "consumption_cooling_emitter_auxiliary_other": "aux_distribution",
+      "consumption_ahu_heating_coil_thermal": "chauffage",
+      "consumption_ahu_cooling_coil_thermal": "froid",
+      "consumption_ahu_auxiliary_fan": "aux_ventilation",
+      "consumption_ahu_heating_auxiliary_other": "aux_distribution",
+      "consumption_ahu_cooling_auxiliary_other": "aux_distribution",
+      "consumption_dhw_emitter_thermal": "ecs",
+      "consumption_dhw_emitter_auxiliary": "aux_distribution",
+      "consumption_electric_equipment": "equipements",
+      "consumption_electric_light": "eclairage"
+    }
+  ],
+  "variant": [
+    {
+      "id": "beton_conductivite",
+      "ref": "beton_conductivite"
+    }
+  ],
+  "year_profile": [
+    {
+      "id": "activite_circulation",
+      "ref": "activite_circulation",
+      "calendar": "activite",
+      "type": "ratio"
+    },
+    {
+      "id": "activite_logement",
+      "ref": "activite_logement",
+      "calendar": "activite",
+      "type": "ratio"
+    },
+    {
+      "id": "always_on",
+      "ref": "always_on",
+      "calendar": "activite",
+      "type": "ratio"
+    },
+    {
+      "id": "occ_logement",
+      "ref": "occ_logement",
+      "calendar": "activite",
+      "type": "ratio"
+    },
+    {
+      "id": "t_chaud_logement",
+      "ref": "t_chaud_logement",
+      "calendar": "activite",
+      "type": "temperature"
+    }
+  ]
+}
