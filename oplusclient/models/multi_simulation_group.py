@@ -5,15 +5,7 @@ from . import SimulationGroup, Weather, Geometry, Obat
 
 
 class MultiSimulationGroup(SimulationGroup):
-    def update_obat(self, obat):
-        if isinstance(obat, Obat):
-            obat = obat.id
-        self.detail_action("update_obat", "PATCH", data=dict(obat=obat))
-
-    def get_obat(self):
-        return self._get_related("config_obat", self.client.obat)
-
-    def add_simulation(self, name, weather, geometry, start, end, variant=None):
+    def add_simulation(self, name, weather, geometry, obat, start, end, variant=None):
         """
         Add a simulation.
 
@@ -22,6 +14,7 @@ class MultiSimulationGroup(SimulationGroup):
         name: str
         weather: Weather or str
         geometry: Geometry or str
+        obat: Obat or str
         start: datetime.date
         end: datetime.date
         variant: str or None
@@ -34,6 +27,8 @@ class MultiSimulationGroup(SimulationGroup):
             weather = weather.id
         if isinstance(geometry, Geometry):
             geometry = geometry.id
+        if isinstance(obat, Obat):
+            obat = obat.id
         return self.simulation_endpoint.data_to_record(
             self.detail_action(
                 "add_simulation",
@@ -42,6 +37,7 @@ class MultiSimulationGroup(SimulationGroup):
                     name=name,
                     weather_id=weather,
                     geometry_id=geometry,
+                    obat_id=obat,
                     start=start.strftime("%Y-%m-%dT00:00:00"),
                     end=end.strftime("%Y-%m-%dT23:59:59"),
                     variant=variant
