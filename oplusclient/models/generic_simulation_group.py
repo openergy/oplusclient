@@ -1,18 +1,7 @@
-import io
-
-import pandas as pd
 from . import SimulationGroup, Weather, Geometry, Obat
 
 
 class GenericSimulationGroup(SimulationGroup):
-    # def update_obat(self, obat):
-    #     if isinstance(obat, Obat):
-    #         obat = obat.id
-    #     self.detail_action("update_obat", "PATCH", data=dict(obat=obat))
-    # 
-    # def get_obat(self):
-    #     return self._get_related("config_obat", self.client.obat)
-    
     def add_simulation(self, name, weather, geometry, obat, start, end, variant=None, substitute_modifications=None):
         """
         Add a simulation.
@@ -30,7 +19,7 @@ class GenericSimulationGroup(SimulationGroup):
 
         Returns
         -------
-        Simulation
+        oplusclient.models.Simulation
         """
         if isinstance(obat, Obat):
             obat = obat.id
@@ -55,39 +44,6 @@ class GenericSimulationGroup(SimulationGroup):
             )
         )
 
-    def update_simulation(self, **kwargs):
-        """
-        Update a simulation.
-
-        Parameters
-        ----------
-        name: str
-        weather: Weather or str
-        geometry: Geometry or str
-        obat: Obat or str
-        start: datetime.date
-        end: datetime.date
-        variant: str or None
-        substitute_modifications: dict or None
-
-        Returns
-        -------
-        Simulation
-        """
-        if isinstance(kwargs.get("weather", None), Weather):
-            kwargs["weather"] = kwargs["weather"].id
-        if isinstance(kwargs.get("geometry", None), Geometry):
-            kwargs["geometry"] = kwargs["geometry"].id
-        if isinstance(kwargs.get("obat", None), Obat):
-            kwargs["obat"] = kwargs["obat"].id
-        return self.simulation_endpoint.data_to_record(
-            self.detail_action(
-                "update_simulation",
-                "PATCH",
-                data=kwargs
-            )
-        )
-
     def delete_simulation(self, simulation):
         """
         Delete a simulation.
@@ -101,78 +57,3 @@ class GenericSimulationGroup(SimulationGroup):
         if isinstance(simulation, Simulation):
             simulation = simulation.id
         self.detail_action("delete_simulation", "DELETE", data=dict(id=simulation))
-
-    def _get_result(self, detail_route):
-        if not self.status == "success":
-            raise ValueError(
-                f"Results are only available if the simulation finished successfully. However its status is"
-                f" {self.status}."
-            )
-        download_url = self.detail_action(detail_route)["blob_url"]
-        return pd.read_csv(io.StringIO(self.client.rest_client.download(
-            download_url
-        ).decode("utf-8")))
-
-    def get_out_envelope(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_envelope")
-
-    def get_out_monthly_comfort_all(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_monthly_comfort_all")
-
-    def get_out_monthly_comfort_indicators(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_monthly_comfort_indicators")
-
-    def get_out_monthly_comfort_occ(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_monthly_comfort_occ")
-
-    def get_out_monthly_consumption_ef(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_monthly_consumption_ef")
-
-    def get_out_monthly_consumption_ep(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_monthly_consumption_ep")
-
-    def get_out_monthly_weather(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_monthly_weather")
-
-    def get_out_zones(self):
-        """
-        Returns
-        -------
-        pd.DataFrame
-        """
-        return self._get_result("out_zones")

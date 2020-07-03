@@ -289,7 +289,7 @@ class Project(BaseModel):
             comment=None
     ):
         """
-        Create a multi_simulation_group in this project.
+        Create a generic_simulation_group in this project.
 
         Parameters
         ----------
@@ -298,7 +298,7 @@ class Project(BaseModel):
 
         Returns
         -------
-        oplusclient.models.MultiSimulationGroup
+        oplusclient.models.GenericSimulationGroup
         """
         data = {k: v for k, v in (
             ("comment", comment),
@@ -307,7 +307,7 @@ class Project(BaseModel):
 
     def get_generic_simulation_group(self, name):
         """
-        Get multi_simulation_group by name.
+        Get generic_simulation_group by name.
 
         Parameters
         ----------
@@ -315,17 +315,17 @@ class Project(BaseModel):
 
         Returns
         -------
-        oplusclient.models.MultiSimulationGroup
+        oplusclient.models.GenericSimulationGroup
         """
         return self._get_by_filter(self.client.generic_simulation_group, name)
 
     def list_generic_simulation_groups(self):
         """
-        List multi_simulation_groups in this project.
+        List generic_simulation_groups in this project.
 
         Returns
         -------
-        list of oplusclient.models.MultiSimulationGroup
+        list of oplusclient.models.GenericSimulationGroup
         """
         return self._list_by_filter(self.client.generic_simulation_group)
 
