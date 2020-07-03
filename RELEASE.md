@@ -2,8 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
-## next
+## 1.1.1
 * p: Floorplan class improvements
+* p: support new multi-simulation format (multi-obat)
 
 # 1.1.0
 * m: Floorplan class was created

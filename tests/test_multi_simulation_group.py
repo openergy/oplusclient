@@ -49,11 +49,11 @@ class TestMultiSimulationGroup(AbstractTestCase):
 
     def test_results(self):
         simulation_group = self.project.create_multi_simulation_group("test")
-        simulation_group.update_obat(self.obat)
         simulation_group.add_simulation(
             "test_simu",
             self.weather,
             self.geometry,
+            self.obat,
             dt.datetime(2019, 1, 1),
             dt.datetime(2019, 1, 2)
         )
