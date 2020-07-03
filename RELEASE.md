@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## next
+* p: Floorplan class improvements
+
 # 1.1.0
 * m: Floorplan class was created
 
