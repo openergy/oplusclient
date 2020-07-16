@@ -453,7 +453,7 @@ class Floorplan:
         return cls(json_data)
 
     @classmethod
-    def geo_data_frame_to_floorplan(cls, geo_data_frame, story_name="story_0", story_height=3):
+    def geo_data_frame_to_floorplan(cls, geo_data_frame, story_name="story_0", story_height=3, rotation_angle=0, snap_to_grid=False, decimal_precision=1):
         """
         Parameters
         ----------
@@ -465,6 +465,12 @@ class Floorplan:
             name that will be given to the unique story
         story_height: float, default 3
             height of the unique story
+        rotation_angle: float, default 0
+            rotation angle of polygons
+        snap_to_grid: boolean, default False
+            indicates if polygons should be snapped to grid in order to facilitate further edition
+        decimal_precision: int, default 1
+            decimal precision of the grid
 
         Returns
         -------
@@ -502,6 +508,9 @@ class Floorplan:
                 polygon = shapely.geometry.Polygon(row.geometry.exterior).simplify(0, preserve_topology=False)
             else:
                 raise NotImplemented
+            polygon = shapely.affinity.rotate(polygon, angle=rotation_angle, origin=[0,0])
+            if snap_to_grid:
+                polygon = shapely.wkt.loads(shapely.wkt.dumps(polygon, rounding_precision=decimal_precision))
             polygons.append(dict(
                 polygon=polygon,
                 is_shading=row.shading,
@@ -511,7 +520,12 @@ class Floorplan:
         # load empty floorplan
         with open(os.path.join(resources_path, "empty_floorplan.flo")) as f:
             floorplan = cls(json.load(f))
-
+        
+        # Set floorplan project parameters
+        fp = floorplan.json_data["project"]
+        fp["north_axis"] = rotation_angle
+        fp["grid"]["spacing"] = 1. / 10.**(decimal_precision)
+        
         # fill it with prepared data
         fs = floorplan.json_data["stories"][0]
         fs["name"] = story_name
