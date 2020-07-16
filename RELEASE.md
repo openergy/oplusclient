@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.2.1
+* p: tools.Floorplan: methods to remove spaces and shadings
+
 ## 1.2.0
 * m: added support for generic simulation groups (incl. substitute modifications)
 
