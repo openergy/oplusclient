@@ -518,7 +518,15 @@ class Floorplan:
         return cls(json_data)
 
     @classmethod
-    def geo_data_frame_to_floorplan(cls, geo_data_frame, story_name="story_0", story_height=3, rotation_angle=0, snap_to_grid=False, decimal_precision=1):
+    def geo_data_frame_to_floorplan(
+        cls,
+        geo_data_frame,
+        story_name="story_0",
+        story_height=3,
+        rotation_angle=0,
+        snap_to_grid=False,
+        decimal_precision=1
+    ):
         """
         Parameters
         ----------
