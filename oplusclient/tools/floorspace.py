@@ -228,6 +228,70 @@ class Floorplan:
         # get the dest vertices and add the source ones
         self._add_face_to_story(face_id, vertices, story)
 
+    def remove_space_from_story(
+            self,
+            story_name,
+            name
+    ):
+        """
+        Add a space to a story.
+
+        Parameters
+        ----------
+        story_name: str
+            name of the story on which the space should be added
+        name: str
+        """
+        try:
+            story = [s for s in self.json_data["stories"] if s["name"] == story_name][0]
+        except IndexError:
+            raise ValueError(f"No story with name {story_name} found")
+
+        space_ix, space = [(i, s) for i, s in enumerate(story["spaces"]) if s["name"] == name][0]
+        del story["spaces"][space_ix]
+
+        self._remove_face_from_story(space["face_id"], story)
+
+    def remove_shading_from_story(
+            self,
+            story_name,
+            name
+    ):
+        """
+        Add a space to a story.
+
+        Parameters
+        ----------
+        story_name: str
+            name of the story on which the space should be added
+        name: str
+        """
+        try:
+            story = [s for s in self.json_data["stories"] if s["name"] == story_name][0]
+        except IndexError:
+            raise ValueError(f"No story with name {story_name} found")
+
+        shading_ix, shading = [(i, s) for i, s in enumerate(story["shadings"]) if s["name"] == name][0]
+        del story["shadings"][shading_ix]
+
+        self._remove_face_from_story(shading["face_id"], story)
+
+    def _remove_face_from_story(self, face_id, story):
+        face_ix, face = [(i, f) for i, f in enumerate(story["geometry"]["faces"]) if f["id"] == face_id][0]
+        del story["geometry"]["faces"][face_ix]
+        deleted_edges = set()
+        for edge in story["geometry"]["edges"]:
+            edge["face_ids"] = [fid for fid in edge["face_ids"] if fid != face_id]
+            if len(edge["face_ids"]) == 0:
+                deleted_edges.add(edge["id"])
+        # remove edges with no face
+        story["geometry"]["edges"] = [e for e in story["geometry"]["edges"] if len(e["face_ids"]) != 0]
+
+        for vertex in story["geometry"]["vertices"]:
+            vertex["edge_ids"] = [eid for eid in vertex["edge_ids"] if eid not in deleted_edges]
+        # remove vertices with no edge
+        story["geometry"]["vertices"] = [v for v in story["geometry"]["vertices"] if len(v["edge_ids"]) != 0]
+
     def _add_face_to_story(self, face_id, face_vertices, story):
         face = dict(
             id=face_id,
@@ -245,6 +309,7 @@ class Floorplan:
         edges = dict()
         for edge in story["geometry"]["edges"]:
             edges[(edge["vertex_ids"][0], edge["vertex_ids"][1])] = edge
+
         for v0, v1 in zip(face_vertices, face_vertices[1:] + face_vertices[0:1]):
             for v in (v0, v1):
                 if v not in vertices:
