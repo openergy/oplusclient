@@ -508,7 +508,8 @@ class Floorplan:
                 polygon = shapely.geometry.Polygon(row.geometry.exterior).simplify(0, preserve_topology=False)
             else:
                 raise NotImplemented
-            polygon = shapely.affinity.rotate(polygon, angle=rotation_angle, origin=[0,0])
+            if rotation_angle:
+                polygon = shapely.affinity.rotate(polygon, angle=rotation_angle, origin=[0, 0])
             if snap_to_grid:
                 polygon = shapely.wkt.loads(shapely.wkt.dumps(polygon, rounding_precision=decimal_precision))
             polygons.append(dict(
@@ -524,7 +525,7 @@ class Floorplan:
         # Set floorplan project parameters
         fp = floorplan.json_data["project"]
         fp["north_axis"] = rotation_angle
-        fp["grid"]["spacing"] = 1. / 10.**(decimal_precision)
+        fp["grid"]["spacing"] = 10 ** (- decimal_precision)
         
         # fill it with prepared data
         fs = floorplan.json_data["stories"][0]
