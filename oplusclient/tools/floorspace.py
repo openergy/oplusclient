@@ -234,7 +234,7 @@ class Floorplan:
             name
     ):
         """
-        Add a space to a story.
+        Remove a space from a story.
 
         Parameters
         ----------
@@ -258,7 +258,7 @@ class Floorplan:
             name
     ):
         """
-        Add a space to a story.
+        Remove a shading from a story.
 
         Parameters
         ----------
