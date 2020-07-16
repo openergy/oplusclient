@@ -2,7 +2,7 @@
 
 * (M): major, (m): minor, (p): patch
 
-## 1.2.1
+## 1.2.2
 * p: tools.Floorplan: methods to remove spaces and shadings
 
 ## 1.2.0
