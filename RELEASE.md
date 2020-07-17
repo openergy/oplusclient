@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## next
+* p: add parameter outputs_detailed_nfen12831 to simulations
+
 ## 1.2.2
 * p: tools.Floorplan: methods to remove spaces and shadings
 
