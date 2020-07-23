@@ -2,7 +2,7 @@
 
 * (M): major, (m): minor, (p): patch
 
-# next
+## 1.3.0
 * m: geometry download_threejs added
 * m: results get_out_monthly_consumption added
 
@@ -16,8 +16,8 @@
 * p: Floorplan class improvements
 * p: support new multi-simulation format (multi-obat)
 
-# 1.1.0
+## 1.1.0
 * m: Floorplan class was created
 
-# 1.0.0
+## 1.0.0
 * M: first version
