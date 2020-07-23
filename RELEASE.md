@@ -2,6 +2,10 @@
 
 * (M): major, (m): minor, (p): patch
 
+# next
+* m: geometry download_threejs added
+* m: results get_out_monthly_consumption added
+
 ## 1.2.2
 * p: tools.Floorplan: methods to remove spaces and shadings
 
