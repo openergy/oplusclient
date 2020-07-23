@@ -1,1 +1,1 @@
-from .floorspace import geo_data_frame_to_floorplan
+from .floorspace import Floorplan
