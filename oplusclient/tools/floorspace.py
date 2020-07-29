@@ -48,6 +48,44 @@ class Floorplan:
         self._color_index = (self._color_index + 1) % len(FLOORSPACE_COLORS)
         return color
 
+    def add_zone_group_tag_1(self, name, color=None):
+        """
+        Create a empty zone_group_tag_1.
+
+        Parameters
+        ----------
+        name: str
+            story name
+        color: str
+            color (hexadecimal string)
+        """
+        self.json_data["zone_groups_tags_1"].append(dict(
+            id=str(uuid.uuid4()),
+            handle=None,
+            name=name,
+            color=color or self.get_next_color(),
+            type="zone_groups_tags_1"
+        ))
+    
+    def add_zone_group_tag_2(self, name, color=None):
+        """
+        Create a empty zone_group_tag_2.
+
+        Parameters
+        ----------
+        name: str
+            story name
+        color: str
+            color (hexadecimal string)
+        """
+        self.json_data["zone_groups_tags_2"].append(dict(
+            id=str(uuid.uuid4()),
+            handle=None,
+            name=name,
+            color=color or self.get_next_color(),
+            type="zone_groups_tags_2"
+        ))
+    
     def add_window_definition(
             self,
             name,
