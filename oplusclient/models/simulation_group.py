@@ -14,17 +14,6 @@ class SimulationGroup(BaseModel):
         super().__init__(endpoint, data)
         self.simulation_endpoint = SimulationEndpoint(self.client, "/simulations", self)
 
-    def _get_result(self, detail_route):
-        if not self.status == "success":
-            raise ValueError(
-                "Results are only available if the simulation group finished successfully. However its status is"
-                f" {self.status}."
-            )
-        download_url = self.detail_action(detail_route)["blob_url"]
-        return pd.read_csv(io.StringIO(self.client.rest_client.download(
-            download_url
-        ).decode("utf-8")))
-
     def run(self, run_old_versions=False, wait_for_start_task=True):
         """
         Run the simulation group.
@@ -105,23 +94,3 @@ class SimulationGroup(BaseModel):
                 return s
         else:
             raise exceptions.RecordNotFoundError(f"There are no simulations in this simulation group with name {name}")
-
-    def get_out_monthly_consumption(self, energy_category="final"):
-        """
-        Parameters
-        ----------
-        energy_category: str, default final
-            final, primary
-
-        Returns
-        -------
-        pd.DataFrame
-        """
-        route = "out_monthly_consumption"
-        if energy_category == "final":
-            route += "_ef"
-        elif energy_category == "primary":
-            route += "_ep"
-        else:
-            raise ValueError(f"Unknown energy category: {energy_category}.")
-        return self._get_result(route)
