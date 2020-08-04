@@ -561,6 +561,7 @@ class Floorplan:
         geo_data_frame,
         story_name="story_0",
         story_height=3,
+        centroid=None,
         rotation_angle=0,
         snap_to_grid=False,
         decimal_precision=1
@@ -605,7 +606,8 @@ class Floorplan:
         gdf = gdf[~gdf.geometry.duplicated(keep="first")]
 
         # find centroid and translate
-        centroid = gdf.geometry.iloc[0].centroid
+        if centroid is None:
+            centroid = gdf.geometry.iloc[0].centroid
         gdf.geometry = gdf.geometry.translate(xoff=-centroid.x, yoff=-centroid.y)
 
         # transform to polygons
