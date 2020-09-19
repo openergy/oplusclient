@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.3.1
+* p: geo_data_frame_to_floorplan debug if no shadings
+
 ## 1.3.0
 * m: geometry download_threejs added
 * m: results get_out_monthly_consumption added

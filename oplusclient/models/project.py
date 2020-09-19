@@ -116,16 +116,16 @@ class Project(BaseModel):
         return self._get_by_filter(self.client.weather, name)
 
     def create_weather(
-        self,
-        name,
-        format,
-        comment=None,
-        location_time_zone_ref=None,
-        sizing=None,
-        site_conditions=None,
-        location_latitude=None,
-        location_longitude=None,
-        location_altitude=None
+            self,
+            name,
+            format,
+            comment=None,
+            location_time_zone_ref=None,
+            sizing=None,
+            site_conditions=None,
+            location_latitude=None,
+            location_longitude=None,
+            location_altitude=None
     ):
         """
         Create a new weather in this project.
@@ -169,15 +169,15 @@ class Project(BaseModel):
 
     # TODO: accept more input types ()
     def create_mono_simulation_group(
-        self,
-        name,
-        comment=None,
-        config_variant=None,
-        config_start=None,
-        config_end=None,
-        config_obat=None,
-        config_geometry=None,
-        config_weather=None
+            self,
+            name,
+            comment=None,
+            config_variant=None,
+            config_start=None,
+            config_end=None,
+            config_obat=None,
+            config_geometry=None,
+            config_weather=None
     ):
         """
         Create a mono_simulation_group in this project.
