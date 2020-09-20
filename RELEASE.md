@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## next
+* m: user and user_organization_permission enpoints added
+
 ## 1.3.1
 * p: geo_data_frame_to_floorplan debug if no shadings
 
