@@ -50,6 +50,22 @@ class Geometry(ImportExportBaseModel):
         self._check_empty()
         return self._download(buffer_or_path=buffer_or_path)
 
+    def download_threejs(self, buffer_or_path=None):
+        """
+        Download this geometry's ogw (Openergy Geometry Wireframe) file.
+
+        Parameters
+        ----------
+        buffer_or_path: str
+            path of the file, if None returns the file content as bytes
+
+        Returns
+        -------
+        bytes
+        """
+        self._check_empty()
+        return self._download(buffer_or_path=buffer_or_path, path="threejs_blob_url")
+
     def download_source_file(self, buffer_or_path=None):
         """
         Download this geometry's ogw (Openergy Geometry Wireframe) file.

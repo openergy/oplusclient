@@ -550,7 +550,8 @@ class Floorplan:
         # remove empty and duplicate geometries
         gdf = gdf[~gdf.is_empty]
         gdf = gdf.sort_values(["shading"])
-        gdf = gdf[~gdf.geometry.duplicated(keep="first")]
+        if len(gdf) > 1:
+            gdf = gdf[~gdf.geometry.duplicated(keep="first")]
 
         # find centroid and translate
         centroid = gdf.geometry.iloc[0].centroid

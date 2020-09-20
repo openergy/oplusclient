@@ -32,8 +32,10 @@ class Client:
                                                      models.GenericSimulationGroup)
 
         # oteams
+        self.user = BaseEndpoint(self, "oteams/users")
         self.organization = BaseEndpoint(self, "oteams/organizations", model_cls=models.Organization)
         self.project = BaseEndpoint(self, "oteams/projects", model_cls=models.Project)
+        self.user_organization_permission = BaseEndpoint(self, "oteams/user_organization_permissions")
 
     def close(self):
         self.rest_client.close()
