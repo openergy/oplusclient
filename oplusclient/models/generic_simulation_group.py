@@ -2,7 +2,18 @@ from . import SimulationGroup, Weather, Geometry, Obat
 
 
 class GenericSimulationGroup(SimulationGroup):
-    def add_simulation(self, name, weather, geometry, obat, start, end, variant=None, substitute_modifications=None):
+    def add_simulation(
+        self,
+        name,
+        weather,
+        geometry,
+        obat,
+        start,
+        end,
+        variant=None,
+        substitute_modifications=None,
+        outputs_detailed_nfen12831=False
+    ):
         """
         Add a simulation.
 
@@ -16,6 +27,7 @@ class GenericSimulationGroup(SimulationGroup):
         end: datetime.date
         variant: str or None
         substitute_modifications: dict or None
+        outputs_detailed_nfen12831: bool
 
         Returns
         -------
@@ -39,7 +51,8 @@ class GenericSimulationGroup(SimulationGroup):
                     start=start.strftime("%Y-%m-%dT00:00:00"),
                     end=end.strftime("%Y-%m-%dT23:59:59"),
                     variant=variant,
-                    substitute_modifications=substitute_modifications
+                    substitute_modifications=substitute_modifications,
+                    outputs_detailed_nfen12831=outputs_detailed_nfen12831
                 )
             )
         )

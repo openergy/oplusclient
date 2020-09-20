@@ -1,4 +1,7 @@
 import time
+import io
+
+import pandas as pd
 
 from ..endpoints.simulation import SimulationEndpoint
 from .. import exceptions

@@ -3,8 +3,18 @@
 * (M): major, (m): minor, (p): patch
 
 ## next
-* p: tools.Floorplan: allow to specify in geo_data_frame_to_floorplan a rotation angle and the possibility to snap the
+* m: user and user_organization_permission endpoints added
+* p: add parameter outputs_detailed_nfen12831 to simulations
+* m: tools.Floorplan: allow to specify in geo_data_frame_to_floorplan a rotation angle and the possibility to snap the
 polygons to the grid with a given precision.
+* m: 
+
+## 1.3.1
+* p: geo_data_frame_to_floorplan debug if no shadings
+
+## 1.3.0
+* m: geometry download_threejs added
+* m: results get_out_monthly_consumption added
 
 ## 1.2.2
 * p: tools.Floorplan: methods to remove spaces and shadings
