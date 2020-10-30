@@ -66,7 +66,7 @@ Here we create an obat using an excel file, and download it in Openergy's obat f
 
     obat = project.create_obat("Test Obat")
     obat.import_file("/path/to/file.xlsx", import_format="xlsx")
-    obat.export("xlsx", buffer_or_path="/path/to/file.xlsx")
+    obat.download_obat(buffer_or_path="/path/to/file.obat")
 
 
 Simulations
