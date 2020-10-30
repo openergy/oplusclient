@@ -1,10 +1,8 @@
-# oplusclient
+# Oplusclient
 
-A python client for Oplus
+![GitHub](https://img.shields.io/github/license/openergy/oplusclient?color=brightgreen)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/oplusclient)
+![PyPI](https://img.shields.io/pypi/v/oplusclient)
 
-## versioning
+Oplusclient is a Python package providing a client for working with Openergy's Oplus platform.
 
-* change version number in pyproject.toml
-* run **poetry build** and **poetry publish**
-
-*[use following instructions to install poetry](https://python-poetry.org/docs/)*
