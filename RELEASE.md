@@ -26,8 +26,8 @@ polygons to the grid with a given precision.
 * p: Floorplan class improvements
 * p: support new multi-simulation format (multi-obat)
 
-# 1.1.0
+## 1.1.0
 * m: Floorplan class was created
 
-# 1.0.0
+## 1.0.0
 * M: first version
