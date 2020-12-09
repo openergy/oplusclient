@@ -6,3 +6,10 @@
 
 Oplusclient is a Python package providing a client for working with Openergy's Oplus platform.
 
+## Documentation
+
+The official documentation is hosted on readthedocs.io : https://oplusclient.readthedocs.io
+
+## License
+
+[Mozilla Public License Version 2.0](./LICENSE.txt)
