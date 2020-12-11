@@ -178,7 +178,8 @@ class Project(BaseModel):
         config_obat=None,
         config_geometry=None,
         config_weather=None,
-        outputs_detailed_nfen12831=False
+        config_outputs_detail_nfen12831=None,
+        config_outputs_report=None
     ):
         """
         Create a mono_simulation_group in this project.
@@ -198,7 +199,8 @@ class Project(BaseModel):
             simulation's geometry id
         config_weather: str
             simulations's weather id
-        config_outputs_detailed_nfen12831: bool
+        config_outputs_detail_nfen12831: bool
+        config_outputs_report: bool
 
         Returns
         -------
@@ -212,7 +214,8 @@ class Project(BaseModel):
             ("config_obat", config_obat),
             ("config_geometry", config_geometry),
             ("config_weather", config_weather),
-            ("config_outputs_detailed_nfen12831", outputs_detailed_nfen12831)
+            ("config_outputs_detail_nfen12831", config_outputs_detail_nfen12831),
+            ("config_outputs_report", config_outputs_report)
         ) if v is not None}
         return self.client.mono_simulation_group.create(name=name, project=self.id, **data)
 

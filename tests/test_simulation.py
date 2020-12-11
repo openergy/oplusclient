@@ -38,7 +38,8 @@ class TestSimulation(AbstractTestCase):
             config_end="2019-02-01T23:59:59",
             config_obat=cls.obat.id,
             config_geometry=cls.geometry.id,
-            config_weather=cls.weather.id
+            config_weather=cls.weather.id,
+            config_outputs_report=True
         )
         print("running simulation")
         cls.simulation_group.run()
@@ -47,8 +48,8 @@ class TestSimulation(AbstractTestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        if cls.project is not None:
-            cls.project.delete()
+        # if cls.project is not None:
+        #     cls.project.delete()
         cls.organization.leave_seat()
         cls.client.close()
 
@@ -66,3 +67,5 @@ class TestSimulation(AbstractTestCase):
         self.assertNotEqual(0, len(self.simulation.get_out_monthly_thermal_balance().columns))
         self.assertNotEqual(0, len(self.simulation.get_out_monthly_weather().columns))
         self.assertNotEqual(0, len(self.simulation.get_out_zones().columns))
+        self.assertTrue(isinstance(self.simulation.download_eplus_output(), bytes))
+        self.assertTrue(isinstance(self.simulation.download_report(), bytes))

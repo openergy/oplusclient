@@ -5,7 +5,18 @@ from . import SimulationGroup, Weather, Geometry, Obat
 
 
 class MultiSimulationGroup(SimulationGroup):
-    def add_simulation(self, name, weather, geometry, obat, start, end, variant=None, outputs_detailed_nfen12831=False):
+    def add_simulation(
+            self,
+            name,
+            weather,
+            geometry,
+            obat,
+            start,
+            end,
+            variant=None,
+            outputs_detail_nfen12831=False,
+            outputs_report=False
+    ):
         """
         Add a simulation.
 
@@ -18,7 +29,8 @@ class MultiSimulationGroup(SimulationGroup):
         start: datetime.date
         end: datetime.date
         variant: str or None
-        outputs_detailed_nfen12831: bool
+        outputs_detail_nfen12831: bool
+        outputs_report: bool
 
         Returns
         -------
@@ -42,7 +54,8 @@ class MultiSimulationGroup(SimulationGroup):
                     start=start.strftime("%Y-%m-%dT00:00:00"),
                     end=end.strftime("%Y-%m-%dT23:59:59"),
                     variant=variant,
-                    outputs_detailed_nfen12831=outputs_detailed_nfen12831
+                    outputs_detail_nfen12831=outputs_detail_nfen12831,
+                    outputs_report=outputs_report
                 )
             )
         )
@@ -59,7 +72,8 @@ class MultiSimulationGroup(SimulationGroup):
         start: datetime.date
         end: datetime.date
         variant: str or None
-        outputs_detailed_nfen12831: bool
+        outputs_detail_nfen12831: bool
+        outputs_report: bool
 
         Returns
         -------

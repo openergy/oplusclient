@@ -8,6 +8,7 @@
 * m: tools.Floorplan: allow to specify in geo_data_frame_to_floorplan a rotation angle and the possibility to snap the
 polygons to the grid with a given precision.
 * m: can add zone group tags to floorplan
+* m: handle simulation reports
 
 ## 1.3.1
 * p: geo_data_frame_to_floorplan debug if no shadings

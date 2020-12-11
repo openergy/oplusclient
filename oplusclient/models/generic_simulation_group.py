@@ -12,7 +12,8 @@ class GenericSimulationGroup(SimulationGroup):
         end,
         variant=None,
         substitute_modifications=None,
-        outputs_detailed_nfen12831=False
+        outputs_detail_nfen12831=False,
+        outputs_report=False
     ):
         """
         Add a simulation.
@@ -28,6 +29,7 @@ class GenericSimulationGroup(SimulationGroup):
         variant: str or None
         substitute_modifications: dict or None
         outputs_detailed_nfen12831: bool
+        outputs_report: bool
 
         Returns
         -------
@@ -52,7 +54,8 @@ class GenericSimulationGroup(SimulationGroup):
                     end=end.strftime("%Y-%m-%dT23:59:59"),
                     variant=variant,
                     substitute_modifications=substitute_modifications,
-                    outputs_detailed_nfen12831=outputs_detailed_nfen12831
+                    outputs_detail_nfen12831=outputs_detail_nfen12831,
+                    outputs_report=outputs_report
                 )
             )
         )

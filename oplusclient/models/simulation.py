@@ -4,7 +4,7 @@ import io
 
 import pandas as pd
 
-from .base import BaseModel
+from .import_export_base import BaseModel
 
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -188,6 +188,32 @@ class Simulation(BaseModel):
         pd.DataFrame
         """
         return self._get_result("out_zones")
+
+    def download_eplus_output(self, buffer_or_path=None):
+        """
+        Parameters
+        ----------
+        buffer_or_path: buffer or path where to save the zipfile with eplus output (if None, returns bytes)
+
+        Returns
+        -------
+        bytes or None
+        """
+        download_url = self.detail_action("eplus_output")["blob_url"]
+        return self.client.rest_client.download(download_url, buffer_or_path=buffer_or_path)
+
+    def download_report(self, buffer_or_path=None):
+        """
+        Parameters
+        ----------
+        buffer_or_path: buffer or path where to save the report (docx format) (if None, returns bytes)
+
+        Returns
+        -------
+        bytes or None
+        """
+        download_url = self.detail_action("report_output")["blob_url"]
+        return self.client.rest_client.download(download_url, buffer_or_path=buffer_or_path)
 
 
 def _nones_to_str(name):
