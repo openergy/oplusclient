@@ -85,6 +85,25 @@ class Floorplan:
             color=color or self.get_next_color(),
             type="zone_groups_tags_2"
         ))
+
+    def add_zone_group_tag_3(self, name, color=None):
+        """
+        Create a empty zone_group_tag_3.
+
+        Parameters
+        ----------
+        name: str
+            story name
+        color: str
+            color (hexadecimal string)
+        """
+        self.json_data["zone_groups_tags_3"].append(dict(
+            id=str(uuid.uuid4()),
+            handle=None,
+            name=name,
+            color=color or self.get_next_color(),
+            type="zone_groups_tags_3"
+        ))
     
     def add_window_definition(
             self,
@@ -182,6 +201,7 @@ class Floorplan:
             name,
             zone_groups_tag_1_id=None,
             zone_groups_tag_2_id=None,
+            zone_groups_tag_3_id=None,
             pitched_roof_id=None,
             daylighting_controls=None,
             color=None
@@ -198,6 +218,7 @@ class Floorplan:
         name: str
         zone_groups_tag_1_id: str or None
         zone_groups_tag_2_id: str or None
+        zone_groups_tag_3_id: str or None
         pitched_roof_id: str or None
         daylighting_controls: list or None
         color: str or None
@@ -217,6 +238,7 @@ class Floorplan:
             face_id=face_id,
             zone_groups_tag_1_id=zone_groups_tag_1_id,
             zone_groups_tag_2_id=zone_groups_tag_2_id,
+            zone_groups_tag_3_id=zone_groups_tag_3_id,
             pitched_roof_id=pitched_roof_id,
             daylighting_controls=daylighting_controls if daylighting_controls is not None else [],
             color=color or self.get_next_color(),
@@ -471,6 +493,7 @@ class Floorplan:
             src_space["name"],
             src_space["zone_groups_tag_1_id"],
             src_space["zone_groups_tag_2_id"],
+            src_space["zone_groups_tag_3_id"],
             src_space["pitched_roof_id"],
             src_space["daylighting_controls"],
             src_space["color"]
