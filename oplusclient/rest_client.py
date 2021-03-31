@@ -42,7 +42,7 @@ class RestClient:
                         for error in errors_l:
                             error_msg += textwrap.indent(f"{error['detailed_code']}: {error['message']}", "  ") + "\n"
                     raise HttpClientError(error_msg)
-            raise HttpClientError(f"{response.status_code}: {response.text}")
+            raise HttpClientError(f"{response.status_code}: {response.text}", status_code=response.status_code)
         elif response.status_code // 100 >= 5:
             raise HttpServerError(f"{response.status_code}: {response.text}")
 

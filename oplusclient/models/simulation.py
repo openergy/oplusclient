@@ -1,13 +1,16 @@
 import time
 import json
 import io
+import datetime as dt
 
 import pandas as pd
 
+from .. import exceptions
 from .import_export_base import BaseModel
 
 
 DT_FORMAT = "%Y-%m-%d %H:%M:%S"
+ISO_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 class Simulation(BaseModel):
@@ -89,22 +92,89 @@ class Simulation(BaseModel):
                 break
             time.sleep(reload_freq)
 
-    def get_out_hourly(self):
+    def _get_generic_viz_blob_info(self):
+        return self.detail_action("generic_viz")
+
+    def _download_out_hourly_file(self, file_path, generic_viz_blob_info=None):
         """
+        file_path must not start with /
+        """
+        if generic_viz_blob_info is None:
+            generic_viz_blob_info = self._get_generic_viz_blob_info()
+        data = self.client.rest_client.download(
+            f"{generic_viz_blob_info['container_url']}{file_path}?{generic_viz_blob_info['sas_token']}"
+        )
+        if isinstance(data, bytes):
+            data = data.decode("utf-8")
+        return data
+
+    def _download_out_hourly_metadata(self, generic_viz_blob_info=None):
+        raw = self._download_out_hourly_file("metadata.json", generic_viz_blob_info=generic_viz_blob_info)
+        return json.loads(raw)
+
+    def _download_out_hourly_index(self, year, generic_viz_blob_info=None):
+        raw = self._download_out_hourly_file(f"{year}/index.json", generic_viz_blob_info=generic_viz_blob_info)
+        return json.loads(raw)
+
+    def _download_out_hourly_se(self, year, series_id, generic_viz_blob_info=None):
+        raw = self._download_out_hourly_file(f"{year}/{series_id}.json")
+        return json.loads(raw)
+
+    def get_out_hourly(self, series_ids=None):
+        """
+        Parameters
+        ----------
+        series_ids: optional, list of ids
+            if not provided: all outputs will be downloaded from stored csv
+            if provided: only given ids will be provided, outputs will be downloaded series by series using
+                (as in generic viz). The series ids can be found using the "get_out_hourly_columns" dataframe.
+
         Returns
         -------
         pd.DataFrame
         """
-        download_url = self.detail_action("hourly_csv")["blob_url"]
-        df = pd.read_csv(
-            io.BytesIO(self.client.rest_client.download(download_url)),
-            compression="zip",
-            header=0,
-            index_col=0,
-            encoding="utf-8"
-        )
-        df.index = pd.to_datetime(df.index, format=DT_FORMAT)
-        return df
+        # whole csv
+        if series_ids is None:
+            download_url = self.detail_action("hourly_csv")["blob_url"]
+            df = pd.read_csv(
+                io.BytesIO(self.client.rest_client.download(download_url)),
+                compression="zip",
+                header=0,
+                index_col=0,
+                encoding="utf-8"
+            )
+            df.index = pd.to_datetime(df.index, format=DT_FORMAT)
+            return df
+
+        # series by series mode
+
+        # prepare generic viz info
+        generic_viz_blob_info = self._get_generic_viz_blob_info()
+
+        # choose year
+        metadata = self._download_out_hourly_metadata(generic_viz_blob_info=generic_viz_blob_info)
+        if len(metadata["years"]) != 1:
+            raise NotImplementedError(
+                f"Series by series download mode is not implemented for multiple year simulations. "
+                f"Current simulation years: {metadata['years']}")
+        year = metadata["years"][0]
+
+        # fixme: make async
+
+        # index
+        index_data = self._download_out_hourly_index(year, generic_viz_blob_info=generic_viz_blob_info)
+        index = pd.DatetimeIndex(map(lambda x: dt.datetime.strptime(x, ISO_FORMAT), index_data))
+
+        data = dict()
+        for se_id in series_ids:
+            # todo: manage not found
+            try:
+                data[se_id] = self._download_out_hourly_se(year, se_id, generic_viz_blob_info=generic_viz_blob_info)
+            except exceptions.HttpClientError as e:
+                if e.status_code == 404:
+                    raise ValueError(f"Simulation does not contain a series with given id '{se_id}'.")
+
+        return pd.DataFrame(data=data, index=index)
 
     def get_out_hourly_columns(self):
         """
@@ -112,17 +182,9 @@ class Simulation(BaseModel):
         -------
         pd.DataFrame
         """
-        data = self.detail_action("generic_viz")
-        content = self.client.rest_client.download(
-            f"{data['container_url']}metadata.json?{data['sas_token']}"
-        )
-        if isinstance(content, bytes):
-            content = content.decode("utf-8")
-        series_data = json.loads(content)
-
-        df = pd.DataFrame.from_records(series_data["series"])
+        metadata = self._download_out_hourly_metadata()
+        df = pd.DataFrame.from_records(metadata["series"])
         df.index = df.apply(_to_ref, axis=1)
-
         return df
 
     def get_out_envelope(self):

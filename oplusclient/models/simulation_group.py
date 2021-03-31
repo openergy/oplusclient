@@ -1,9 +1,8 @@
 import time
-import io
-
-import pandas as pd
+from typing import Iterable
 
 from ..endpoints.simulation import SimulationEndpoint
+from ..models.simulation import Simulation
 from .. import exceptions
 from ..task import Task
 from .base import BaseModel
@@ -46,7 +45,7 @@ class SimulationGroup(BaseModel):
             time.sleep(ms)
             self.reload()
 
-    def iter_simulations(self, filter_by_status=None):
+    def iter_simulations(self, filter_by_status=None) -> Iterable[Simulation]:
         """
         Iter through all simulations of the simulation group.
 

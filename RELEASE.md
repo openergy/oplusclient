@@ -2,7 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
-## next
+## 1.4.0
+* m: error message status code may be stored in an exception
+* m: hourly download can now be performed on a subset of outputs
 * m: user and user_organization_permission endpoints added
 * p: add parameter outputs_detailed_nfen12831 to simulations
 * m: tools.Floorplan: allow to specify in geo_data_frame_to_floorplan a rotation angle and the possibility to snap the
