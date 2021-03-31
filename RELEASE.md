@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.5.0
+* m: add zone group tag 3 added to floorplan
+
 ## 1.4.0
 * m: error message status code may be stored in an exception
 * m: hourly download can now be performed on a subset of outputs
