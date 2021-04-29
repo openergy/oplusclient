@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.5.1
+* p: simulation endpoint iter method debug (for more than 200 simulations)
+
 ## 1.5.0
 * m: add zone group tag 3 added to floorplan
 

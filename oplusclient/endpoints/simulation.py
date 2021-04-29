@@ -28,9 +28,11 @@ class SimulationEndpoint:
         list of oplusclient.models.Simulation
         str
         """
-        records_data = self.client.rest_client.list(
+        data = self.client.rest_client.list(
             self.route, params=dict(status=filter_by_status, next_marker=next_marker)
-        )["data"]
+        )
+        records_data = data["data"]
+        next_marker = data.get("next_marker")
         return [self.data_to_record(data) for data in records_data], next_marker
 
     def iter(self, filter_by_status=None):
