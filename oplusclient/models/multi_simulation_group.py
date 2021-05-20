@@ -1,7 +1,9 @@
 import io
+import datetime as dt
 
 import pandas as pd
 from . import SimulationGroup, Weather, Geometry, Obat
+from ..util import get_id
 
 
 class MultiSimulationGroup(SimulationGroup):
@@ -179,3 +181,35 @@ class MultiSimulationGroup(SimulationGroup):
         pd.DataFrame
         """
         return self._get_result("out_zones")
+
+    def copy(self, destination_simulation_group_name):
+        """
+
+        Parameters
+        ----------
+        destination_simulation_group_name: copied simulation group name
+
+        Returns
+        -------
+        copied simulation group
+        """
+        # create new simulation group
+        dst_group: MultiSimulationGroup = self.endpoint.create(
+            name=destination_simulation_group_name,
+            project=get_id(self.project)
+        )
+
+        # attach new simulations
+        for src_simu in self.iter_simulations():
+            dst_group.add_simulation(
+                src_simu.name,
+                src_simu.weather_id,
+                src_simu.geometry_id,
+                src_simu.obat_id,
+                dt.datetime.strptime(src_simu.start[:10], "%Y-%m-%d"),
+                dt.datetime.strptime(src_simu.end[:10], "%Y-%m-%d"),
+                variant=src_simu.variant,
+                outputs_detail_nfen12831=src_simu.outputs_detail_nfen12831,
+                outputs_report=src_simu.outputs_report
+            )
+        return dst_group

@@ -1,5 +1,11 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..endpoints import BaseEndpoint
+
+
 class BaseModel:
-    def __init__(self, endpoint, data):
+    def __init__(self, endpoint: "BaseEndpoint", data):
         self.endpoint = endpoint
         self.client = self.endpoint.client
         self.data = data

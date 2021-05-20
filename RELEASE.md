@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.6.0
+* m: multi simulation group copy was implemented
+
 ## 1.5.1
 * p: simulation endpoint iter method debug (for more than 200 simulations)
 
