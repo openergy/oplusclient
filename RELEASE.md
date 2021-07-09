@@ -2,6 +2,10 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.7.0
+* m: mono simulation copy was implemented
+* m: openergy_historical_weather_series endpoint was added
+
 ## 1.6.0
 * m: multi simulation group copy was implemented
 

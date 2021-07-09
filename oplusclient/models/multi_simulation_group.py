@@ -196,7 +196,8 @@ class MultiSimulationGroup(SimulationGroup):
         # create new simulation group
         dst_group: MultiSimulationGroup = self.endpoint.create(
             name=destination_simulation_group_name,
-            project=get_id(self.project)
+            project=get_id(self.project),
+            comment=self.comment
         )
 
         # attach new simulations

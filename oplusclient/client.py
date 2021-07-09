@@ -9,27 +9,60 @@ class Client:
         self.rest_client: RestClient = RestClient(api_token=api_token, base_url=base_url)
 
         # geometry
-        self.geometry = BaseEndpoint(self, "ossgeometry/geometries", model_cls=models.Geometry)
-        self.floorspace = BaseEndpoint(self, "ossgeometry/floorspaces", model_cls=models.Floorspace)
+        self.geometry = BaseEndpoint(
+            self,
+            "ossgeometry/geometries",
+            model_cls=models.Geometry)
+        self.floorspace = BaseEndpoint(
+            self,
+            "ossgeometry/floorspaces",
+            model_cls=models.Floorspace)
 
         # obat
-        self.obat = BaseEndpoint(self, "ossbat/obats", model_cls=models.Obat)
+        self.obat = BaseEndpoint(
+            self,
+            "ossbat/obats",
+            model_cls=models.Obat)
 
         # weather
-        self.weather = BaseEndpoint(self, "ossweather/weathers", model_cls=models.Weather)
-        self.generic_weather_series = BaseEndpoint(self, "ossweather/generic_weather_series",
-                                                   model_cls=models.ImportExportBaseModel)
-        self.historical_weather_series = BaseEndpoint(self, "ossweather/historical_weather_series",
-                                                      model_cls=models.ImportExportBaseModel)
+        self.weather = BaseEndpoint(
+            self,
+            "ossweather/weathers",
+            model_cls=models.Weather)
+
+        self.generic_weather_series = BaseEndpoint(
+            self,
+            "ossweather/generic_weather_series",
+            model_cls=models.ImportExportBaseModel)
+
+        self.historical_weather_series = BaseEndpoint(
+            self,
+            "ossweather/historical_weather_series",
+            model_cls=models.ImportExportBaseModel)
+
+        self.openergy_historical_weather_series = BaseEndpoint(
+            self,
+            "ossweather/openergy_historical_weather_series",
+            model_cls=models.ImportExportBaseModel
+        )
 
         # simulations
-        self.simulation_group = BaseEndpoint(self, "osssimulations/simulation_groups", models.SimulationGroup)
-        self.multi_simulation_group = BaseEndpoint(self, "osssimulations/multi_simulation_groups",
-                                                   models.MultiSimulationGroup)
-        self.mono_simulation_group = BaseEndpoint(self, "osssimulations/mono_simulation_groups",
-                                                  models.MonoSimulationGroup)
-        self.generic_simulation_group = BaseEndpoint(self, "osssimulations/generic_simulation_groups",
-                                                     models.GenericSimulationGroup)
+        self.simulation_group = BaseEndpoint(
+            self,
+            "osssimulations/simulation_groups",
+            models.SimulationGroup)
+        self.multi_simulation_group = BaseEndpoint(
+            self,
+            "osssimulations/multi_simulation_groups",
+            models.MultiSimulationGroup)
+        self.mono_simulation_group = BaseEndpoint(
+            self,
+            "osssimulations/mono_simulation_groups",
+            models.MonoSimulationGroup)
+        self.generic_simulation_group = BaseEndpoint(
+            self,
+            "osssimulations/generic_simulation_groups",
+            models.GenericSimulationGroup)
 
         # oteams
         self.user = BaseEndpoint(self, "oteams/users")

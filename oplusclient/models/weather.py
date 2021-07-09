@@ -14,8 +14,13 @@ class Weather(ImportExportBaseModel):
             return self._get_related("generic_weather_series", self.client.generic_weather_series)
         elif self.format == "historical":
             return self._get_related("historical_weather_series", self.client.historical_weather_series)
+        elif self.format == "openergy_historical":
+            return self._get_related(
+                "openergy_historical_weather_series",
+                self.client.openergy_historical_weather_series
+            )
         else:
-            raise NotImplementedError("Unknown format")
+            raise NotImplementedError(f"Unknown format: {self.format}")
 
     def import_file(self, buffer_or_path, import_format="ow", csv_separator=",", csv_decimal="."):
         """
@@ -48,6 +53,7 @@ class Weather(ImportExportBaseModel):
         Parameters
         ----------
         export_format: str
+            "csv", "epw"
         buffer_or_path: BytesIO like or string
         csv_separator: str
             separator used if the export_format is a csv file
@@ -65,7 +71,8 @@ class Weather(ImportExportBaseModel):
             # TODO: do not use private methods
             return series._export(
                 export_format=export_format,
-                params=dict(csv_separator=csv_separator, csv_decimal=csv_decimal)
+                params=dict(csv_separator=csv_separator, csv_decimal=csv_decimal),
+                buffer_or_path=buffer_or_path
             )
 
     def clear_weather_series(self):

@@ -111,7 +111,7 @@ class Project(BaseModel):
 
         Returns
         -------
-        oplusclient.models.Obat
+        oplusclient.models.Weather
         """
         return self._get_by_filter(self.client.weather, name)
 

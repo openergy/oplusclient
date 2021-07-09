@@ -5,6 +5,9 @@ from ..models import BaseModel
 logger = logging.getLogger(__name__)
 
 
+DEFAULT_LIST_LIMIT = 200
+
+
 class BaseEndpoint:
     MAX_ITERATIONS = 100
 
@@ -21,7 +24,7 @@ class BaseEndpoint:
     def data_to_record(self, data):
         return self.model_cls(self, data)
 
-    def list(self, filter_by=None, limit=100, offset=0, extra_params=None):
+    def list(self, filter_by=None, limit=DEFAULT_LIST_LIMIT, offset=0, extra_params=None):
         params = dict()
         if filter_by is not None:
             params.update(filter_by)
@@ -32,14 +35,15 @@ class BaseEndpoint:
         if offset > 0:
             params["start"] = offset
         records_data = self.client.rest_client.list(
-            self.route, params=params
+            self.route,
+            params=params
         )["data"]
         return [self.data_to_record(data) for data in records_data]
 
     def iter(self, filter_by=None, extra_params=None):
-        limit = 100
+        limit = DEFAULT_LIST_LIMIT
         _i = 0
-        for i in range(100):
+        for i in range(self.MAX_ITERATIONS):
             offset = i * limit
             records = self.list(
                 filter_by=filter_by,
@@ -47,10 +51,10 @@ class BaseEndpoint:
                 offset=offset,
                 extra_params=extra_params
             )
-            if len(records) == 0:
-                break
             for record in records:
                 yield record
+            if len(records) < limit:
+                break
         else:
             raise RuntimeError(f"maximum iteration was reached ({self.MAX_ITERATIONS}), stopping")
 
