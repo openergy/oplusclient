@@ -1,4 +1,3 @@
-from ..exceptions import RecordNotFoundError
 from .import_export_base import BaseModel
 
 
@@ -19,10 +18,7 @@ class Organization(BaseModel):
         ------
         RecordNotFoundError
         """
-        try:
-            return self.client.project.list(filter_by=dict(organization=self.id, name=project_name))[0]
-        except IndexError:
-            raise RecordNotFoundError(f"There are no project in organization {self.name} with name {project_name}")
+        return self.client.project.get_one_and_only_one(filter_by=dict(organization=self.id, name=project_name))
 
     def take_seat(self):
         """

@@ -16,7 +16,13 @@ class BaseModel:
         return self.data[item]
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}: {self.id}>"
+        msg = f"<{self.__class__.__name__}: "
+        try:
+            name = self.name
+            msg += f"{name} ({self.id})>"
+        except AttributeError:
+            msg += f"{self.id}>"
+        return msg
 
     def _get_related(self, name, endpoint):
         data = getattr(self, name)

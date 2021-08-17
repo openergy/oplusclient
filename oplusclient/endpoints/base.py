@@ -4,7 +4,6 @@ from ..models import BaseModel
 
 logger = logging.getLogger(__name__)
 
-
 DEFAULT_LIST_LIMIT = 200
 
 
@@ -58,6 +57,13 @@ class BaseEndpoint:
         else:
             raise RuntimeError(f"maximum iteration was reached ({self.MAX_ITERATIONS}), stopping")
 
+    def get_one_and_only_one(self, filter_by=None):
+        params = dict()
+        if filter_by is not None:
+            params.update(filter_by)
+        record_data = self.client.rest_client.get_one_and_only_one(self.route, params)
+        return self.data_to_record(record_data)
+
     def create(self, **data):
         rep_data = self.client.rest_client.create(self.route, data)
         return self.data_to_record(rep_data)
@@ -65,5 +71,3 @@ class BaseEndpoint:
     def retrieve(self, record_id, params=None):
         rep_data = self.client.rest_client.retrieve(self.route, record_id, params=params)
         return self.data_to_record(rep_data)
-
-

@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.8.0
+* m: get_one_and_only one implemented
+
 ## 1.7.0
 * m: mono simulation copy was implemented
 * m: openergy_historical_weather_series endpoint was added

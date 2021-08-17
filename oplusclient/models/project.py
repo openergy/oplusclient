@@ -1,4 +1,3 @@
-from ..exceptions import RecordNotFoundError
 from .import_export_base import BaseModel
 
 
@@ -339,8 +338,4 @@ class Project(BaseModel):
         return list(endpoint.iter(filter_by=dict(project=self.id)))
 
     def _get_by_filter(self, endpoint, name):
-        try:
-            return endpoint.list(filter_by=dict(project=self.id, name=name))[0]
-        except IndexError:
-            raise RecordNotFoundError(f"Could not find {endpoint.route.split('/')[-1]} "
-                                      f"with name {name} in project {self.name}")
+        return endpoint.get_one_and_only_one(filter_by=dict(project=self.id, name=name))

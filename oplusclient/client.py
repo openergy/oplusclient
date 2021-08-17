@@ -1,7 +1,6 @@
 from .rest_client import RestClient
 from .endpoints import BaseEndpoint
 from . import models
-from .exceptions import RecordNotFoundError
 
 
 class Client:
@@ -85,10 +84,7 @@ class Client:
         -------
         oplusclient.models.Organization
         """
-        try:
-            return self.organization.list(filter_by=dict(name=name))[0]
-        except IndexError:
-            raise RecordNotFoundError
+        return self.organization.get_one_and_only_one(filter_by=dict(name=name))
 
     def get_project(self, organization_name, project_name):
         """
@@ -104,7 +100,4 @@ class Client:
         oplusclient.models.Project
         """
         organization = self.get_organization(organization_name)
-        try:
-            return self.project.list(filter_by=dict(organization=organization.id, name=project_name))[0]
-        except IndexError:
-            raise RecordNotFoundError
+        self.project.get_one_and_only_one(filter_by=dict(organization=organization.id, name=project_name))

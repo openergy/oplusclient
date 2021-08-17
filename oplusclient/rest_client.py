@@ -8,7 +8,7 @@ import base64
 import requests
 from requests.auth import AuthBase
 
-from .exceptions import InvalidToken, HttpClientError, HttpServerError
+from .exceptions import InvalidToken, HttpClientError, HttpServerError, RecordNotFoundError, MultipleRecordsFoundError
 
 
 class RestClient:
@@ -69,6 +69,16 @@ class RestClient:
         )
         self._raise_for_status(response)
         return response.json()
+
+    def get_one_and_only_one(self, path, params=None):
+        records_list = self.list(path, params=params)["data"]
+        if len(records_list) == 1:
+            return records_list[0]
+        if len(records_list) == 0:
+            raise RecordNotFoundError("Did not find any record matching given conditions.")
+        list_str = "\t" + "\n\t".join([str(r) for r in records_list])
+        raise MultipleRecordsFoundError(
+            f"{len(records_list)} records matching given conditions where returned instead of one :\n{list_str}")
 
     def update(self, path, record_id, data):
         response = self._session.put(
