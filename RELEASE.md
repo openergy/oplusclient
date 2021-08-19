@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.8.1
+* p: client.get_project debug
+
 ## 1.8.0
 * m: get_one_and_only one implemented
 

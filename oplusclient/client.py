@@ -100,4 +100,4 @@ class Client:
         oplusclient.models.Project
         """
         organization = self.get_organization(organization_name)
-        self.project.get_one_and_only_one(filter_by=dict(organization=organization.id, name=project_name))
+        return self.project.get_one_and_only_one(filter_by=dict(organization=organization.id, name=project_name))
