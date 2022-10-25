@@ -1,7 +1,10 @@
 import os
-from ._abstract import AbstractTestCase
+import unittest
+from tests.base import AbstractTestCase
 
 
+# fixme: reconnect
+unittest.SkipTest("must manage test api token")
 class TestWeather(AbstractTestCase):
     def test_list_get_update(self):
         self.project.create_weather("test-weather", "generic")

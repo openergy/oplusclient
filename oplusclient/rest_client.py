@@ -15,8 +15,16 @@ class RestClient:
     def __init__(
             self,
             api_token=None,
-            base_url="https://oplus-back.openergy.fr/api/v1"
+            base_url=None
     ):
+        """
+        Parameters
+        ----------
+        api_token
+        base_url: default https://oplus-back.openergy.fr/api/v1
+        """
+        if base_url is None:
+            base_url = "https://oplus-back.openergy.fr/api/v1"
         self.base_url = base_url[:-1] if base_url.endswith("/") else base_url
         self._session = requests.Session()
         self._session.auth = _JWTAuth(

@@ -5,6 +5,7 @@ import oplusclient.models
 from oplusclient import exceptions
 
 
+# fixme: reconnect
 class AbstractTestCase(unittest.TestCase):
     resources_dir_path = os.path.join(os.path.dirname(__file__), "resources")
     api_token = os.getenv("OPLUS_API_TOKEN")

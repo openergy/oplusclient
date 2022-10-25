@@ -1,11 +1,16 @@
 import os
 import datetime as dt
+import unittest
+
+import pandas as pd
 
 from oplusclient import Client, exceptions, models
-from ._abstract import AbstractTestCase
+from tests.base import AbstractTestCase
 
 
-class TestGenericSimulationGroup(AbstractTestCase):
+# fixme: reconnect
+unittest.SkipTest("must manage test api token")
+class TestMultiSimulationGroup(AbstractTestCase):
     obat: models.Obat = None
     weather: models.Weather = None
     geometry: models.Geometry = None
@@ -29,7 +34,7 @@ class TestGenericSimulationGroup(AbstractTestCase):
             pass
         cls.project = cls.organization.create_project("oplusclient-test-project")
         cls.obat = cls.project.create_obat("test")
-        cls.obat.import_file(os.path.join(cls.resources_dir_path, "obat", "obat_variant.obat"))
+        cls.obat.import_file(os.path.join(cls.resources_dir_path, "obat", "obat.obat"))
         cls.weather = cls.project.create_weather("test", format="generic")
         cls.weather.import_file(os.path.join(cls.resources_dir_path, "weather", "weather.ow"))
         cls.geometry = cls.project.create_geometry("test", format="import")
@@ -45,35 +50,24 @@ class TestGenericSimulationGroup(AbstractTestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_substitute_modifications(self):
-        simulation_group = self.project.create_generic_simulation_group("test")
-        simu = simulation_group.add_simulation(
+    def test_results(self):
+        simulation_group = self.project.create_multi_simulation_group("test")
+        simulation_group.add_simulation(
             "test_simu",
             self.weather,
             self.geometry,
             self.obat,
             dt.datetime(2019, 1, 1),
-            dt.datetime(2019, 1, 2),
-            variant="beton_conductivite"
-        )
-        modified_simu = simulation_group.add_simulation(
-            "test_simu_modified",
-            self.weather,
-            self.geometry,
-            self.obat,
-            dt.datetime(2019, 1, 1),
-            dt.datetime(2019, 1, 2),
-            variant="beton_conductivite",
-            substitute_modifications=dict(beton_conductivite=dict(value=.1)),
+            dt.datetime(2019, 1, 2)
         )
         simulation_group.run()
         simulation_group.wait_for_completion()
         self.assertEqual(simulation_group.status, "success")
-        simu.reload()
-        modified_simu.reload()
-        self.assertNotEqual(
-            simu.get_out_hourly()[
-                "comfort|mean_air_temperature|not_assigned|not_assigned|etage_0_zone_0_1|celsius|||"].mean(),
-            modified_simu.get_out_hourly()[
-                "comfort|mean_air_temperature|not_assigned|not_assigned|etage_0_zone_0_1|celsius|||"].mean()
-        )
+        self.assertNotEqual(0, len(simulation_group.get_out_zones()))
+        self.assertNotEqual(0, len(simulation_group.get_out_monthly_weather()))
+        self.assertNotEqual(0, len(simulation_group.get_out_envelope()))
+        self.assertIsInstance(simulation_group.get_out_monthly_comfort_indicators(), pd.DataFrame)
+        self.assertNotEqual(0, len(simulation_group.get_out_monthly_comfort_all()))
+        self.assertIsInstance(simulation_group.get_out_monthly_comfort_occ(), pd.DataFrame)
+        self.assertIsInstance(simulation_group.get_out_monthly_consumption_ef(), pd.DataFrame)
+        self.assertIsInstance(simulation_group.get_out_monthly_consumption_ep(), pd.DataFrame)

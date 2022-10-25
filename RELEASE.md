@@ -2,6 +2,9 @@
 
 * (M): major, (m): minor, (p): patch
 
+## 1.8.2
+* p: new devops management
+
 ## 1.8.1
 * p: client.get_project debug
 
@@ -52,4 +55,4 @@ polygons to the grid with a given precision.
 * m: Floorplan class was created
 
 ## 1.0.0
-* M: first version
+* M: first versioning (Odyssey v2)

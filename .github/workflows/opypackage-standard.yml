@@ -1,0 +1,13 @@
+name: test-and-publish
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  openergy:
+    uses: openergy/ogithub-actions/.github/workflows/opypackage-standard-v02.yml@master
+    secrets:
+      AZURE_CONDA_CHANNEL_KEY: ${{ secrets.AZURE_CONDA_CHANNEL_KEY }}
+      CONDA_CHANNEL_SYSADMIN_URL: ${{ secrets.CONDA_CHANNEL_SYSADMIN_URL }}
+      ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+      PYPI_OPENERGY_PASSWORD: ${{ secrets.PYPI_OPENERGY_PASSWORD }}

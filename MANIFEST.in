@@ -1,0 +1,4 @@
+include README.md
+include RELEASE.md
+recursive-include oplusclient/tools/resources *
+exclude tests

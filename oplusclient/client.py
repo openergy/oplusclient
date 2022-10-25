@@ -4,7 +4,13 @@ from . import models
 
 
 class Client:
-    def __init__(self, api_token=None, base_url="https://oplus-back.openergy.fr/api/v1"):
+    def __init__(self, api_token=None, base_url=None):
+        """
+        Parameters
+        ----------
+        api_token
+        base_url: default https://oplus-back.openergy.fr/api/v1
+        """
         self.rest_client: RestClient = RestClient(api_token=api_token, base_url=base_url)
 
         # geometry
