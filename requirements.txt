@@ -1,2 +1,2 @@
 requests>=2.23,<3
-pandas>=1.0.4,<2
+pandas>=1.5.0,<2.2 #todo: test
